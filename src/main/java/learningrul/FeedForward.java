@@ -14,6 +14,11 @@ public class FeedForward {
 	private INDArray dotproductatOutput;
 	private INDArray outputLayerSValues;
 	
+	/**
+	 * This is the consturctors for feedforward
+	 * @param hiddenLayer - holds the hiddenlayer 
+	 * @param outputLayer - holds the outputlayer
+	 */
 	public FeedForward(INDArray hiddenLayer, INDArray outputLayer)
 	{
 		hiddenlayer = hiddenLayer;
@@ -21,8 +26,8 @@ public class FeedForward {
 	}
 	
 	/**
-	 * 
-	 * @param row
+	 * This method does the calculations for feed forward on the network
+	 * @param row - holds an input of the data 
 	 */
 	public void caluclations(INDArray row)
 	{
@@ -52,14 +57,21 @@ public class FeedForward {
 		System.out.println(outputLayerSValues);
 	}
 	
+	/**
+	 * This method returns output at the Hidden Layer
+	 * @return hiddenLayerSValues - holds the hidden layer output
+	 */
 	public INDArray getOutputofHiddenLayer()
 	{
 		return hiddenLayerSValues;
 	}
 	
-	
+	/**
+	 * This method returns the output at the output layer
+	 * @return outputLayerSValues - holds the output layer output
+	 */
 	public INDArray getOutputofOutputLayer()
 	{
-		return dotproductatOutput;
+		return outputLayerSValues;
 	}
 }

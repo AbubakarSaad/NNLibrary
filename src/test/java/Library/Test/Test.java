@@ -29,6 +29,7 @@ public class Test {
         INDArray moreHiddenLayers = Nd4j.create(list, new int[]{2,2});
         System.out.println(list);
 		System.out.println(moreHiddenLayers);
+		
     }
     public static void main(String[] args)
     {
