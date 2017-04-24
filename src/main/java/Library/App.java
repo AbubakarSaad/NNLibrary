@@ -1,6 +1,7 @@
 package Library;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
@@ -25,10 +26,15 @@ public class App
 		//System.out.print(inputLayer);
 		
 		// neuron(sizeofInput, numberofHidden)
-		INDArray hiddenLayer = getHiddenLayer(inputLayer.size(1), 25);
+		INDArray hiddenLayer = getHiddenLayer(inputLayer.size(1), 2);
+		System.out.println(hiddenLayer);
+		
 		INDArray outputLayer = getOutputLayer(hiddenLayer.size(1), 10);
 		
 		FeedForward ff = new FeedForward(hiddenLayer, outputLayer);
+		
+		
+		
 		// send one sample at a time
 		for(int i=0; i<epoch; i++)
 		{
@@ -53,6 +59,7 @@ public class App
 	
 	public INDArray getHiddenLayer(int inputlayerSize, int numOfHiddenNeurons)
 	{
+		
 		return new Neuron(inputlayerSize, numOfHiddenNeurons).getWeights();
 	}
 	
