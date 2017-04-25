@@ -1,4 +1,4 @@
-package learning_rule;
+package Library.learningrules;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
 

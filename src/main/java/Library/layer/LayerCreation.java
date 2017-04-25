@@ -1,4 +1,4 @@
-package Library.neuron;
+package Library.layer;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
@@ -6,7 +6,7 @@ import org.nd4j.linalg.factory.Nd4j;
 /**
  * Created by Abu on 4/23/2017.
  */
-public class Neuron {
+public class LayerCreation {
 
     private INDArray weights;
     
@@ -15,7 +15,7 @@ public class Neuron {
      * @param numberofInputs - number of inputs 
      * @param numberofHidden - number of neurons in the layer
      */
-    public Neuron(int numberofInputs, int numberofHidden)
+    public LayerCreation(int numberofInputs, int numberofHidden)
     {
 
         // Nd4j.rand(rows, columns, min, max, random)

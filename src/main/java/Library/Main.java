@@ -1,12 +1,11 @@
 package Library;
 
 import java.io.IOException;
-
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
-import Library.neuron.Neuron;
-import learning_rule.FeedForward;
+import Library.layer.LayerCreation;
+import Library.learningrules.FeedForward;
 
 
 public class Main 
@@ -74,7 +73,7 @@ public class Main
 	public INDArray getHiddenLayer(int inputlayerSize, int numOfHiddenNeurons)
 	{
 		
-		return new Neuron(inputlayerSize, numOfHiddenNeurons).getWeights();
+		return new LayerCreation(inputlayerSize, numOfHiddenNeurons).getWeights();
 	}
 	
 	/**
@@ -85,7 +84,7 @@ public class Main
 	 */
 	public INDArray getOutputLayer(int hiddenLayerSize, int numOfOutputNeurons)
 	{
-		return new Neuron(hiddenLayerSize, numOfOutputNeurons).getWeights();
+		return new LayerCreation(hiddenLayerSize, numOfOutputNeurons).getWeights();
 	}
 
 
