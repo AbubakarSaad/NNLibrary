@@ -16,9 +16,11 @@ import learningrul.FeedForward;
 public class App 
 {
 	public int epoch = 1;
-    public App()
+	private INDArray hiddenLayerOutput;
+	private INDArray outputLayerOutput;
+    
+	public App()
     {
-        Neuron n = new Neuron(2, 3);
 		final String dir = System.getProperty("user.dir");
 		    	
 		// input layer 
@@ -42,10 +44,20 @@ public class App
 			for(int j=0; j<inputLayer.size(0) - 399; j++)
 			{
 				ff.caluclations(inputLayer.getRow(j));
+				
+				hiddenLayerOutput = ff.getOutputofHiddenLayer();
+				outputLayerOutput = ff.getOutputofOutputLayer();
+			
 			}
 		}
     }
     
+	/**
+	 * 
+	 * @param fileName
+	 * @param delimiter
+	 * @return
+	 */
     public INDArray getInputLayer(String fileName, String delimiter)
 	{
 		try {
@@ -57,12 +69,24 @@ public class App
 		return null;
 	}
 	
+    /**
+     * 
+     * @param inputlayerSize
+     * @param numOfHiddenNeurons
+     * @return
+     */
 	public INDArray getHiddenLayer(int inputlayerSize, int numOfHiddenNeurons)
 	{
 		
 		return new Neuron(inputlayerSize, numOfHiddenNeurons).getWeights();
 	}
 	
+	/**
+	 * 
+	 * @param hiddenLayerSize
+	 * @param numOfOutputNeurons
+	 * @return
+	 */
 	public INDArray getOutputLayer(int hiddenLayerSize, int numOfOutputNeurons)
 	{
 		return new Neuron(hiddenLayerSize, numOfOutputNeurons).getWeights();

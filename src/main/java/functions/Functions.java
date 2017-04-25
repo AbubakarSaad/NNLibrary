@@ -1,8 +1,6 @@
 package functions;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.api.ops.impl.transforms.Sigmoid;
-import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.ops.transforms.Transforms;
 
 public class Functions {
@@ -12,6 +10,12 @@ public class Functions {
 		
 	}
 	
+	/**
+	 * This is method for sigmoid
+	 * @param input - takes an array to apply sigmoid
+	 * @param x - true if the dreviate of sigmoid required
+	 * @return - simgmoided values
+	 */
 	public INDArray sigmoid(INDArray input, Boolean x)
 	{
 		if(x == true)
@@ -20,5 +24,11 @@ public class Functions {
 			
 		}
 		return Transforms.sigmoid(input);
+	}
+	
+	public INDArray exceptedOutput(int id)
+	{
+		return null;
+		
 	}
 }
