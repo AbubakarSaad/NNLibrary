@@ -1,7 +1,6 @@
 package Library;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
@@ -9,10 +8,7 @@ import org.nd4j.linalg.factory.Nd4j;
 import Library.neuron.Neuron;
 import learningrul.FeedForward;
 
-/**
- * Hello world!
- *
- */
+
 public class App 
 {
 	public int epoch = 1;
