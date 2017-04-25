@@ -21,8 +21,8 @@ public class FeedForward {
 	 */
 	public FeedForward(INDArray hiddenLayer, INDArray outputLayer)
 	{
-		hiddenlayer = hiddenLayer;
-		outputlayer = outputLayer;
+		this.hiddenlayer = hiddenLayer;
+		this.outputlayer = outputLayer;
 	}
 	
 	/**
@@ -31,7 +31,7 @@ public class FeedForward {
 	 */
 	public void feedForward(INDArray row)
 	{
-		System.out.println(row);
+		//System.out.println(row);
 		//System.out.println(hiddenlayer);
 		dotproductatHidden = row.mmul(hiddenlayer);
 		
