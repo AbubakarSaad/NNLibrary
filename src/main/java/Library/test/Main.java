@@ -1,4 +1,5 @@
-package Library;
+package Library.test;
+import Library.neuralnetwork.NeuralNetwork;
 import org.nd4j.linalg.api.ndarray.INDArray;
 
 
@@ -10,8 +11,7 @@ public class Main
     
 	public Main()
     {
-		
-		
+		NeuralNetwork NN = new NeuralNetwork();
 		
 		// send one sample at a time
 //		for(int i=0; i<epoch; i++)
