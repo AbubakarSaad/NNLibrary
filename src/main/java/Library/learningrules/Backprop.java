@@ -1,8 +1,8 @@
-package learning_rule;
+package Library.learningrules;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
 
-import functions.Functions;
+import Library.functions.Functions;
 
 public class Backprop {
 

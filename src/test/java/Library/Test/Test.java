@@ -6,7 +6,7 @@ import java.util.List;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
-import Library.neuron.Neuron;
+import Library.layer.LayerCreation;
 
 /**
  * Created by Abu on 4/23/2017.
@@ -24,8 +24,8 @@ public class Test {
         System.out.println(nd.mmul(nd2));
         
         List<INDArray> list = new ArrayList<INDArray>();
-        list.add(new Neuron(2, 3).getWeights());
-        list.add(new Neuron(2, 3).getWeights());
+        list.add(new LayerCreation(2, 3).getWeights());
+        list.add(new LayerCreation(2, 3).getWeights());
         INDArray moreHiddenLayers = Nd4j.create(list, new int[]{2,2});
         System.out.println(list);
 		System.out.println(moreHiddenLayers);

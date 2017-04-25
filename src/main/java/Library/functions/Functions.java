@@ -1,4 +1,4 @@
-package functions;
+package Library.functions;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
@@ -14,8 +14,8 @@ public class Functions {
 	/**
 	 * This is method for sigmoid
 	 * @param input - takes an array to apply sigmoid
-	 * @param x - true if the dreviate of sigmoid required
-	 * @return - simgmoided values
+	 * @param x - true if the derivative of sigmoid required
+	 * @return - sigmoided values
 	 */
 	public INDArray sigmoid(INDArray input, Boolean x)
 	{
