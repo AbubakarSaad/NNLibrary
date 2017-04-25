@@ -1,7 +1,6 @@
 package Library;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
@@ -9,17 +8,14 @@ import org.nd4j.linalg.factory.Nd4j;
 import Library.neuron.Neuron;
 import learning_rule.FeedForward;
 
-/**
- * Hello world!
- *
- */
-public class App 
+
+public class Main 
 {
 	public int epoch = 1;
 	private INDArray hiddenLayerOutput;
 	private INDArray outputLayerOutput;
     
-	public App()
+	public Main()
     {
 		final String dir = System.getProperty("user.dir");
 		    	
@@ -43,7 +39,7 @@ public class App
 			System.out.println("----------------------Epoch: " + i + "--------------------------");
 			for(int j=0; j<inputLayer.size(0) - 399; j++)
 			{
-				ff.caluclations(inputLayer.getRow(j));
+				ff.feedForward(inputLayer.getRow(j));
 				
 				hiddenLayerOutput = ff.getOutputofHiddenLayer();
 				outputLayerOutput = ff.getOutputofOutputLayer();
@@ -95,7 +91,7 @@ public class App
 
     public static void main( String[] args )
     {
-        new App();
+        new Main();
         System.out.println( "Hello World!" );
     }
 }

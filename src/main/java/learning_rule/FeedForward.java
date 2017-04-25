@@ -29,7 +29,7 @@ public class FeedForward {
 	 * This method does the calculations for feed forward on the network
 	 * @param row - holds an input of the data 
 	 */
-	public void caluclations(INDArray row)
+	public void feedForward(INDArray row)
 	{
 		System.out.println(row);
 		System.out.println(hiddenlayer);
