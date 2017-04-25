@@ -15,7 +15,7 @@ public class FeedForward {
 	private INDArray outputLayerSValues;
 	
 	/**
-	 * This is the consturctors for feedforward
+	 * This is the constructer for feedforward
 	 * @param hiddenLayer - holds the hiddenlayer 
 	 * @param outputLayer - holds the outputlayer
 	 */
@@ -32,29 +32,29 @@ public class FeedForward {
 	public void feedForward(INDArray row)
 	{
 		System.out.println(row);
-		System.out.println(hiddenlayer);
+		//System.out.println(hiddenlayer);
 		dotproductatHidden = row.mmul(hiddenlayer);
 		
 		
-		System.out.println("something works here");
-		System.out.println(dotproductatHidden);
+		//System.out.println("something works here");
+		//System.out.println(dotproductatHidden);
 		
 		// bias require here for hidden layer
 		
 		
 		// Sigmoided Values
 		hiddenLayerSValues = sig.sigmoid(dotproductatHidden, false);
-		System.out.println(hiddenLayerSValues);
+		//System.out.println(hiddenLayerSValues);
 		
 		// dotproduct for summation of the hiddenlayer and weights (hiddenLayer to outputlayer)
 		dotproductatOutput = hiddenLayerSValues.mmul(outputlayer);
-		System.out.println(dotproductatOutput);
+		//System.out.println(dotproductatOutput);
 		
 		// bias for output layer 
 		
 		// output layer sigmoided values
 		outputLayerSValues = sig.sigmoid(dotproductatOutput, false);
-		System.out.println(outputLayerSValues);
+		//System.out.println(outputLayerSValues);
 	}
 	
 	/**
