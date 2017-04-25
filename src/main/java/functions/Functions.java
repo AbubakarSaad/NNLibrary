@@ -29,6 +29,5 @@ public class Functions {
 	public INDArray exceptedOutput(int id)
 	{
 		return null;
-		
 	}
 }
