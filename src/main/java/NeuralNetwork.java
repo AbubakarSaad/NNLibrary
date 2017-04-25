@@ -7,8 +7,10 @@ import org.nd4j.linalg.factory.Nd4j;
 
 public class NeuralNetwork {
 	
+	final String dir = System.getProperty("user.dir");
+	
 	public NeuralNetwork(){
-		final String dir = System.getProperty("user.dir");
+		
 		    	
 		// input layer 
 		INDArray inputLayer = getInputLayer(dir + "//a1digits//digit_test_0.txt", ",");
