@@ -22,14 +22,36 @@ public class NeuralNetwork {
 	private INDArray outputLayerWeights = null;
 	private TrainingTechniques tt;
 	
-	public NeuralNetwork(int hiddenLayerSize, int outputLayerSize, int epochs){
+	public NeuralNetwork(int hiddenLayerSize, int outputLayerSize, int epochs, double learningRate){
 		this.epochs = epochs;
 		this.hiddenLayerWeights = createHiddenLayer(inputLayerSize, hiddenLayerSize);
 		this.outputLayerWeights = createOutputLayer(hiddenLayerSize, outputLayerSize);
 		
 		// Intialize and sends training data and values at the hidden and output layer to trainingtechniques class.
 		List<INDArray> trainingData = loadTrainingFiles(",");
-		tt = new TrainingTechniques(trainingData, hiddenLayerWeights, outputLayerWeights);
+		tt = new TrainingTechniques(trainingData, hiddenLayerWeights, outputLayerWeights, learningRate);
+		
+	}
+	
+	public NeuralNetwork(int hiddenLayerSize, int outputLayerSize, int epochs, double learningRate, String learningParam){
+		this.epochs = epochs;
+		this.hiddenLayerWeights = createHiddenLayer(inputLayerSize, hiddenLayerSize);
+		this.outputLayerWeights = createOutputLayer(hiddenLayerSize, outputLayerSize);
+		
+		// Intialize and sends training data and values at the hidden and output layer to trainingtechniques class.
+		List<INDArray> trainingData = loadTrainingFiles(",");
+		tt = new TrainingTechniques(trainingData, hiddenLayerWeights, outputLayerWeights, learningRate, "bias");
+		
+	}
+	
+	public NeuralNetwork(int hiddenLayerSize, int outputLayerSize, int epochs, double learningRate, String bias, String momentum){
+		this.epochs = epochs;
+		this.hiddenLayerWeights = createHiddenLayer(inputLayerSize, hiddenLayerSize);
+		this.outputLayerWeights = createOutputLayer(hiddenLayerSize, outputLayerSize);
+		
+		// Intialize and sends training data and values at the hidden and output layer to trainingtechniques class.
+		List<INDArray> trainingData = loadTrainingFiles(",");
+		tt = new TrainingTechniques(trainingData, hiddenLayerWeights, outputLayerWeights, learningRate);
 		
 	}
 	

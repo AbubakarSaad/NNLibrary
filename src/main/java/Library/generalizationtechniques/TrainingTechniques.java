@@ -16,15 +16,45 @@ public class TrainingTechniques {
 	private Backprop bp;
 	private INDArray hiddenLayerWeights;
 	private INDArray outputLayerWeights;
+
 	private double correctAnswer = 0;
+
+	private INDArray biasArrayH;
+	private INDArray biasArrayO;
+
 	
-	public TrainingTechniques(List<INDArray> trainingData, INDArray hiddenLayerWeights, INDArray outputLayerWeights){
+	public TrainingTechniques(List<INDArray> trainingData, INDArray hiddenLayerWeights, INDArray outputLayerWeights, double learningRate){
 		this.hiddenLayerWeights = hiddenLayerWeights;
 		this.outputLayerWeights = outputLayerWeights;
 		this.trainingData = trainingData;
 		
 		ff =  new FeedForward(hiddenLayerWeights, outputLayerWeights);
-		bp = new Backprop(hiddenLayerWeights, outputLayerWeights);
+		bp = new Backprop(hiddenLayerWeights, outputLayerWeights, learningRate);
+		//System.out.println("hiddenLayerweight began: \n"+hiddenLayerWeights);
+	}
+	
+	/**
+	 * This is contructor that includes bias or momentum
+	 * @param trainingData - holds the training data
+	 * @param hiddenLayerWeights - holds the hidden layer weights values
+	 * @param outputLayerWeights - holds the output layer weights values
+	 * @param learningParams - ask for the bias or momentum included in the learning
+	 */
+	public TrainingTechniques(List<INDArray> trainingData, INDArray hiddenLayerWeights, INDArray outputLayerWeights, double learningRate, String learningParams){
+		this.hiddenLayerWeights = hiddenLayerWeights;
+		this.outputLayerWeights = outputLayerWeights;
+		this.trainingData = trainingData;
+		//trainingIndexArray();
+		if (learningParams == "bias")
+		{
+			biasArrayH = Nd4j.rand(1, this.hiddenLayerWeights.size(1), -0.5, 0.5, Nd4j.getRandom());
+			biasArrayO = Nd4j.rand(1, this.outputLayerWeights.size(1), -0.5, 0.5, Nd4j.getRandom());
+		}
+		
+		ff =  new FeedForward(hiddenLayerWeights, outputLayerWeights, biasArrayH, biasArrayO);
+		bp = new Backprop(hiddenLayerWeights, outputLayerWeights, learningRate);
+		//System.out.println("hiddenLayerweight began: \n"+hiddenLayerWeights);
+
 	}
 	
 	public void Holdout(int epochs){
@@ -39,8 +69,7 @@ public class TrainingTechniques {
 				accuracy(randomIndex.get(j));
 				bp.calculations(ff.getOutputofOutputLayer(), ff.getOutputofHiddenLayer(), errorAtOutput, trainingData.get(randomIndex.get(j)));
 				hiddenLayerWeights = bp.getUpdatedHiddenLayerWeights();
-				outputLayerWeights = bp.getUpdatedOutputLayerWeights();
-				
+				outputLayerWeights = bp.getUpdatedOutputLayerWeights();	
 			}
 			System.out.println("Epoch: " + i);
 			System.out.println("Accuracy per Epoch: " + correctAnswer / trainingData.size());
@@ -84,6 +113,11 @@ public class TrainingTechniques {
 	}
 		
 	
+	/**
+	 * This method calculates and returns the expected output for the given sample 
+	 * @param index - the position in the array of the sample
+	 * @return - an expected output 
+	 */
 	public INDArray expectedOutput(int index){
 		if(Math.floor(index / 700) == 0)
 		  {
