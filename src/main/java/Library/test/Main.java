@@ -3,15 +3,16 @@ import Library.neuralnetwork.NeuralNetwork;
 import org.nd4j.linalg.api.ndarray.INDArray;
 
 
-public class Main 
-{
-	public int epoch = 1;
+public class Main {
+	
 	private INDArray hiddenLayerOutput;
 	private INDArray outputLayerOutput;
     
 	public Main()
     {
-		NeuralNetwork NN = new NeuralNetwork();
+		// parameters order: hiddenLayerSize, outputLayerSize, epochs. 
+		NeuralNetwork NN = new NeuralNetwork(10, 10, 3);
+		NN.holdoutTraining();
 		
 		// send one sample at a time
 //		for(int i=0; i<epoch; i++)
