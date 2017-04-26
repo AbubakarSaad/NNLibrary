@@ -1,7 +1,6 @@
 package Library.learningrules;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.factory.Nd4j;
 
 import Library.functions.Functions;
 
@@ -35,7 +34,7 @@ public class Backprop {
 	 }
 	 
 	 /**
-	  * This method calculatues the gradients 
+	  * This method calculates the gradients 
 	  * @param outputLayerOutput
 	  * @param hiddenLayerOutput
 	  * @param errorAtOutput

@@ -20,7 +20,7 @@ public class Functions {
 	{
 		if(x == true)
 		{
-			return input.mul(input.sub(1, input));
+			 return input.mul(input.sub(1));
 			
 		}
 		return Transforms.sigmoid(input);
