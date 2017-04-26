@@ -16,13 +16,13 @@ public class Functions {
 	 * @param x - true if the derivative of sigmoid required
 	 * @return - sigmoided values
 	 */
-	public INDArray sigmoid(INDArray inputx, Boolean x)
+	public INDArray sigmoid(INDArray input, Boolean x)
 	{
 		if(x == true)
 		{
-			return inputx.mul(inputx.sub(1));
+			return input.mul(input.sub(1));
 		}
-		return Transforms.sigmoid(inputx);
+		return Transforms.sigmoid(input);
 	}
 	
 	
