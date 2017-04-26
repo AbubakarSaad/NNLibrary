@@ -40,6 +40,10 @@ public class TrainingTechniques {
 		Collections.shuffle(randomIndex);
 		return randomIndex;
 	}
+	public void accuracy(){
+	
+	}
+		
 	
 	public INDArray expectedOutput(int index){
 		if(Math.floor(index / 700) == 0)

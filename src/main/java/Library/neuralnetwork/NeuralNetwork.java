@@ -34,7 +34,6 @@ public class NeuralNetwork {
 	
 	public void holdoutTraining(){
 		tt.Holdout(epochs);
-		System.out.println("Reached");
 	}
 	
 	public List<String> loadAllFiles(String path){
