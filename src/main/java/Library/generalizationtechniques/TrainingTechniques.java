@@ -1,9 +1,12 @@
 
 package Library.generalizationtechniques;
+import Library.learningrules.Backprop;
 import Library.learningrules.FeedForward;
 import java.util.ArrayList;
 import java.util.Collections;
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
+
 import java.util.List;
 import org.nd4j.linalg.factory.Nd4j;
 
@@ -11,11 +14,18 @@ import org.nd4j.linalg.factory.Nd4j;
 public class TrainingTechniques {
 	private List<INDArray> trainingData;
 	private FeedForward ff;
+	private Backprop bp;
+	private INDArray hiddenLayerWeights;
+	private INDArray outputLayerWeights;
 	
 	public TrainingTechniques(List<INDArray> trainingData, INDArray hiddenLayerWeights, INDArray outputLayerWeights){
+		this.hiddenLayerWeights = hiddenLayerWeights;
+		this.outputLayerWeights = outputLayerWeights;
 		this.trainingData = trainingData;
 		//trainingIndexArray();
 		ff =  new FeedForward(hiddenLayerWeights, outputLayerWeights);
+		bp = new Backprop(hiddenLayerWeights, outputLayerWeights);
+		System.out.println("hiddenLayerweight began: \n"+hiddenLayerWeights);
 	}
 	
 	public void Holdout(int epochs){
@@ -23,8 +33,15 @@ public class TrainingTechniques {
 		
 		for(int i = 0; i < epochs; i++){
 			ArrayList<Integer> randomIndex = trainingIndexArray();
-			for(int j = 0; j < trainingData.size(); j++){
+			for(int j = 0; j < trainingData.size() - 6999; j++){
 				ff.forwardPass(trainingData.get(randomIndex.get(i)));
+				INDArray errorAtOutput = ff.getOutputofOutputLayer().sub(expectedOutput(randomIndex.get(i)));
+				
+				bp.calculations(ff.getOutputofOutputLayer(), ff.getOutputofHiddenLayer(), errorAtOutput, trainingData.get(randomIndex.get(i)));
+				
+				hiddenLayerWeights = bp.getUpdatedHiddenLayerWeights();
+				outputLayerWeights = bp.getUpdatedOutputLayerWeights();
+				
 			}
 		}
 	}
@@ -79,4 +96,5 @@ public class TrainingTechniques {
 		  }
 		return null;
 	}
+	
 }

@@ -30,6 +30,7 @@ public class NeuralNetwork {
 		// Intialize and sends training data and values at the hidden and output layer to trainingtechniques class.
 		List<INDArray> trainingData = loadTrainingFiles(",");
 		tt = new TrainingTechniques(trainingData, hiddenLayerWeights, outputLayerWeights);
+		
 	}
 	
 	public void holdoutTraining(){
@@ -56,6 +57,7 @@ public class NeuralNetwork {
 	 */
     public List<INDArray> loadTrainingFiles(String delimeter){
 		List<String> allTrainingFiles = new ArrayList<String>();
+		/** Add a variables for the folder in order to make it dynamic**/
 		allTrainingFiles = loadAllFiles(dir + "//a1digits");
 		List<INDArray> trainingData = new ArrayList<INDArray>();
 		Iterator<String> iter = allTrainingFiles.iterator();
