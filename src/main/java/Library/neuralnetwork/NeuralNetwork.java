@@ -18,23 +18,24 @@ public class NeuralNetwork {
 	private int inputLayerSize = 64;
 	private int hiddenLayerSize = 0;
 	private int outputLayerSize = 0;
-	private INDArray hiddenLayer = null;
-	private INDArray outputLayer = null;
+	private INDArray hiddenLayerWeights = null;
+	private INDArray outputLayerWeights = null;
 	private TrainingTechniques tt;
 	
 	public NeuralNetwork(int hiddenLayerSize, int outputLayerSize, int epochs){
 		this.epochs = epochs;
-		this.hiddenLayer = createHiddenLayer(inputLayerSize, hiddenLayerSize);
-		this.outputLayer = createOutputLayer(hiddenLayerSize, outputLayerSize);
+		this.hiddenLayerWeights = createHiddenLayer(inputLayerSize, hiddenLayerSize);
+		this.outputLayerWeights = createOutputLayer(hiddenLayerSize, outputLayerSize);
 		
 		// Intialize and sends training data and values at the hidden and output layer to trainingtechniques class.
 		List<INDArray> trainingData = loadTrainingFiles(",");
-		tt = new TrainingTechniques(trainingData, hiddenLayer, outputLayer);
+		tt = new TrainingTechniques(trainingData, hiddenLayerWeights, outputLayerWeights);
 		
 	}
 	
 	public void holdoutTraining(){
-		tt.Holdout(1);
+		tt.Holdout(epochs);
+		System.out.println("Reached");
 	}
 	
 	public List<String> loadAllFiles(String path){

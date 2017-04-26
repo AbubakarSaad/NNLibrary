@@ -11,7 +11,7 @@ public class Main {
 	public Main()
     {
 		// parameters order: hiddenLayerSize, outputLayerSize, epochs. 
-		NeuralNetwork NN = new NeuralNetwork(10, 10, 3);
+		NeuralNetwork NN = new NeuralNetwork(10, 10, 1);
 		NN.holdoutTraining();
 		
 		// send one sample at a time

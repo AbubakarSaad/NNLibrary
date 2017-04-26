@@ -48,18 +48,17 @@ public class Test {
 		
 		for(int i=0; i<epoch; i++)
 		{
-				System.out.println("----------------------Epoch: " + i + "--------------------------");
-				for(int j=0; j<inputLayer.size(0) - 399; j++)
-				{
-					ff.forwardPass(inputLayer.getRow(j));
-				
-					hiddenLayerOutput = ff.getOutputofHiddenLayer();
-					outputLayerOutput = ff.getOutputofOutputLayer();
-					
-					
-					//INDArray errorAtOutput = outputLayerOutput.sub(bp.exceptedOutput(0));
-				
-					//bp.calculations(outputLayerOutput, hiddenLayerOutput, errorAtOutput, inputLayer.getRow(j));
+			System.out.println("----------------------Epoch: " + i + "--------------------------");
+			for(int j=0; j<inputLayer.size(0) - 399; j++)
+			{
+				ff.forwardPass(inputLayer.getRow(j));
+			
+				hiddenLayerOutput = ff.getOutputofHiddenLayer();
+				outputLayerOutput = ff.getOutputofOutputLayer();
+
+				//INDArray errorAtOutput = outputLayerOutput.sub(func.expectedOutput(0));
+			
+				//bp.calculations(outputLayerOutput, hiddenLayerOutput, errorAtOutput, inputLayer.getRow(j));
 			}
 		}
 		
