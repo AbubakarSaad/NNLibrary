@@ -9,13 +9,13 @@ public class Backprop {
 	private INDArray outputSigmoidedValues;
 	private INDArray errorContrAtOutput;
 	Functions func = new Functions();
-	private INDArray hiddenLayer;
-	private INDArray outputLayer;
+	private INDArray hiddenLayerWeights;
+	private INDArray outputLayerWeights;
 	
-	public Backprop(INDArray hiddenLayer, INDArray outputLayer)
+	public Backprop(INDArray hiddenLayerWeights, INDArray outputLayerWeights)
 	 {
-		this.hiddenLayer = hiddenLayer;
-		this.outputLayer = outputLayer;
+		this.hiddenLayerWeights = hiddenLayerWeights;
+		this.outputLayerWeights = outputLayerWeights;
 	 }
 	 
 	 
@@ -39,7 +39,7 @@ public class Backprop {
 		 System.out.println("gradient Transposed back: \n" + gradientForOutput);
 		 
 		 // The hidden layer error contributions
-		 INDArray errorContrAtHidden = errorContrAtOutput.mmul(outputLayer.transpose());
+		 INDArray errorContrAtHidden = errorContrAtOutput.mmul(outputLayerWeights.transpose());
 		 
 		 INDArray bi = func.sigmoid(hiddenLayerOutput, true);
 		 INDArray errorAtHidden = errorContrAtHidden.muli(bi);

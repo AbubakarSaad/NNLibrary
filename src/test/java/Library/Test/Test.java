@@ -57,9 +57,9 @@ public class Test {
 					outputLayerOutput = ff.getOutputofOutputLayer();
 					
 					
-					INDArray errorAtOutput = outputLayerOutput.sub(func.exceptedOutput(0));
+					//INDArray errorAtOutput = outputLayerOutput.sub(func.expectedOutput(0));
 				
-					bp.calculations(outputLayerOutput, hiddenLayerOutput, errorAtOutput, inputLayer.getRow(j));
+					//bp.calculations(outputLayerOutput, hiddenLayerOutput, errorAtOutput, inputLayer.getRow(j));
 				}
 			}
 		
