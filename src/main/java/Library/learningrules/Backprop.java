@@ -1,6 +1,7 @@
 package Library.learningrules;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
 
 import Library.functions.Functions;
 
@@ -12,6 +13,11 @@ public class Backprop {
 	private INDArray hiddenLayer;
 	private INDArray outputLayer;
 	
+	public Backprop()
+	{
+		
+	}
+	
 	public Backprop(INDArray hiddenLayer, INDArray outputLayer)
 	 {
 		this.hiddenLayer = hiddenLayer;
@@ -21,7 +27,6 @@ public class Backprop {
 	 
 	 public void calculations(INDArray outputLayerOutput, INDArray hiddenLayerOutput, INDArray errorAtOutput, INDArray sample)
 	 {
-	  
 		 // The output layer error contributions
 		 outputSigmoidedValues = func.sigmoid(outputLayerOutput, true);
 		 errorContrAtOutput = outputSigmoidedValues.muli(errorAtOutput);
@@ -54,4 +59,40 @@ public class Backprop {
 		 
 		 
 	 }
+	 
+	 public INDArray exceptedOutput(int id)
+		{
+			if(Math.floor(id / 700) == 0)
+			  {
+			   return Nd4j.create(new double[]{1,0,0,0,0,0,0,0,0,0});
+			  }else if(Math.floor(id / 700) == 1)
+			  {
+			   return Nd4j.create(new double[]{0,1,0,0,0,0,0,0,0,0});
+			  }else if(Math.floor(id / 700) == 2)
+			  {
+			   return Nd4j.create(new double[]{0,0,1,0,0,0,0,0,0,0});
+			  }else if(Math.floor(id / 700) == 3)
+			  {
+			   return Nd4j.create(new double[]{0,0,0,1,0,0,0,0,0,0});
+			  }else if(Math.floor(id / 700) == 4)
+			  {
+			   return Nd4j.create(new double[]{0,0,0,0,1,0,0,0,0,0});
+			  }else if(Math.floor(id / 700) == 5)
+			  {
+			   return Nd4j.create(new double[]{0,0,0,0,0,1,0,0,0,0});
+			  }else if(Math.floor(id / 700) == 6)
+			  {
+			   return Nd4j.create(new double[]{0,0,0,0,0,0,1,0,0,0});
+			  }else if(Math.floor(id / 700) == 7)
+			  {
+			   return Nd4j.create(new double[]{0,0,0,0,0,0,0,1,0,0});
+			  }else if(Math.floor(id / 700) == 8)
+			  {
+			   return Nd4j.create(new double[]{0,0,0,0,0,0,0,0,1,0});
+			  }else if(Math.floor(id / 700) == 9)
+			  {
+			   return Nd4j.create(new double[]{0,0,0,0,0,0,0,0,0,1});
+			  }
+			return null;
+		}
 }

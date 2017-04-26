@@ -27,39 +27,5 @@ public class Functions {
 		return Transforms.sigmoid(input);
 	}
 	
-	public INDArray exceptedOutput(int id)
-	{
-		if(Math.floor(id / 700) == 0)
-		  {
-		   return Nd4j.create(new double[]{1,0,0,0,0,0,0,0,0,0});
-		  }else if(Math.floor(id / 700) == 1)
-		  {
-		   return Nd4j.create(new double[]{0,1,0,0,0,0,0,0,0,0});
-		  }else if(Math.floor(id / 700) == 2)
-		  {
-		   return Nd4j.create(new double[]{0,0,1,0,0,0,0,0,0,0});
-		  }else if(Math.floor(id / 700) == 3)
-		  {
-		   return Nd4j.create(new double[]{0,0,0,1,0,0,0,0,0,0});
-		  }else if(Math.floor(id / 700) == 4)
-		  {
-		   return Nd4j.create(new double[]{0,0,0,0,1,0,0,0,0,0});
-		  }else if(Math.floor(id / 700) == 5)
-		  {
-		   return Nd4j.create(new double[]{0,0,0,0,0,1,0,0,0,0});
-		  }else if(Math.floor(id / 700) == 6)
-		  {
-		   return Nd4j.create(new double[]{0,0,0,0,0,0,1,0,0,0});
-		  }else if(Math.floor(id / 700) == 7)
-		  {
-		   return Nd4j.create(new double[]{0,0,0,0,0,0,0,1,0,0});
-		  }else if(Math.floor(id / 700) == 8)
-		  {
-		   return Nd4j.create(new double[]{0,0,0,0,0,0,0,0,1,0});
-		  }else if(Math.floor(id / 700) == 9)
-		  {
-		   return Nd4j.create(new double[]{0,0,0,0,0,0,0,0,0,1});
-		  }
-		return null;
-	}
+	
 }

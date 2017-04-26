@@ -47,21 +47,21 @@ public class Test {
 		Backprop bp = new Backprop(hiddenLayer, outputLayer);
 		
 		for(int i=0; i<epoch; i++)
+		{
+			System.out.println("----------------------Epoch: " + i + "--------------------------");
+			for(int j=0; j<inputLayer.size(0) - 399; j++)
 			{
-				System.out.println("----------------------Epoch: " + i + "--------------------------");
-				for(int j=0; j<inputLayer.size(0) - 399; j++)
-				{
-					ff.feedForward(inputLayer.getRow(j));
-					
-					hiddenLayerOutput = ff.getOutputofHiddenLayer();
-					outputLayerOutput = ff.getOutputofOutputLayer();
-					
-					
-					INDArray errorAtOutput = outputLayerOutput.sub(func.exceptedOutput(0));
+				ff.feedForward(inputLayer.getRow(j));
 				
-					bp.calculations(outputLayerOutput, hiddenLayerOutput, errorAtOutput, inputLayer.getRow(j));
-				}
+				hiddenLayerOutput = ff.getOutputofHiddenLayer();
+				outputLayerOutput = ff.getOutputofOutputLayer();
+				
+				
+				INDArray errorAtOutput = outputLayerOutput.sub(bp.exceptedOutput(0));
+			
+				bp.calculations(outputLayerOutput, hiddenLayerOutput, errorAtOutput, inputLayer.getRow(j));
 			}
+		}
 		
     }
     
