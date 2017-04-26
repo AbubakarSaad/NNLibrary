@@ -8,6 +8,8 @@ public class FeedForward {
 
 	private INDArray hiddenlayer;
 	private INDArray outputlayer;
+	private INDArray biasArrayH;
+	private INDArray biasArrayO;
 	private Functions sig = new Functions();
 	private INDArray dotproductatHidden;
 	private INDArray hiddenLayerSValues;
@@ -26,6 +28,21 @@ public class FeedForward {
 	}
 	
 	/**
+	 * This is the contructor for feedforward including the bias
+	 * @param hiddenLayer - holds the hiddenLayer weights
+	 * @param outputLayer - holds the outputLayer weights
+	 * @param biasArrayH - holds the bias values for hidden layer
+	 * @param biasArrayO - holds the bias values for output layer
+	 */
+	public FeedForward(INDArray hiddenLayer, INDArray outputLayer, INDArray biasArrayH, INDArray biasArrayO)
+	{
+		this.hiddenlayer = hiddenLayer;
+		this.outputlayer = outputLayer;
+		this.biasArrayH = biasArrayH;
+		this.biasArrayO = biasArrayO;
+	}
+	
+	/**
 	 * This method does the calculations for feed forward on the network
 	 * @param row - holds an input of the data 
 	 */
@@ -35,6 +52,14 @@ public class FeedForward {
 		dotproductatHidden = row.mmul(hiddenlayer);
 		// bias require here for hidden layer
 		
+		if(biasArrayH != null)
+		{
+			if(biasArrayH.size(0) > 0) dotproductatHidden = dotproductatHidden.add(biasArrayH);
+			
+		}
+		
+		
+		//if(biasArray.length() > 0) 
 		
 		// Sigmoided Values
 		hiddenLayerSValues = sig.sigmoid(dotproductatHidden, false);
@@ -43,7 +68,10 @@ public class FeedForward {
 		dotproductatOutput = hiddenLayerSValues.mmul(outputlayer);
 		
 		// bias for output layer 
-		
+		if(biasArrayO != null)
+		{
+			if(biasArrayO.size(0) > 0) dotproductatHidden = dotproductatHidden.add(biasArrayO);
+		}
 		// output layer sigmoided values
 		outputLayerSValues = sig.sigmoid(dotproductatOutput, false);
 	}

@@ -44,7 +44,9 @@ public class Test {
 		
 		FeedForward ff = new FeedForward(hiddenLayer, outputLayer);
 		
-		Backprop bp = new Backprop(hiddenLayer, outputLayer);
+		Backprop bp = new Backprop(hiddenLayer, outputLayer, 0.05);
+		
+		
 		
 		for(int i=0; i<epoch; i++)
 		{
