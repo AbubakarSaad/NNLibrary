@@ -1,5 +1,5 @@
 package Library.neuralnetwork;
-
+import Library.generalizationtechniques.TrainingTechniques;
 import Library.layer.LayerCreation;
 import java.io.File;
 import java.io.IOException;
@@ -14,16 +14,22 @@ import org.nd4j.linalg.factory.Nd4j;
 
 public class NeuralNetwork {
 	final String dir = System.getProperty("user.dir");
+	private int epochs = 0;
+	private int inputLayerSize = 64;
+	private int hiddenLayerSize = 0;
+	private int outputLayerSize = 0;
+	private INDArray hiddenLayer = null;
+	private INDArray outputLayer = null;
+	private TrainingTechniques tt;
 	
-	public NeuralNetwork(){
+	public NeuralNetwork(int hiddenLayerSize, int outputLayerSize, int epochs){
+		this.epochs = epochs;
+		this.hiddenLayer = createHiddenLayer(inputLayerSize, hiddenLayerSize);
+		this.outputLayer = createOutputLayer(hiddenLayerSize, outputLayerSize);
 		
-		//loadTrainingFiles(",");
-		loadTestingFiles(",");
-		// neuron(sizeofInput, numberofHidden)
-		//INDArray hiddenLayer = getHiddenLayer(training_files.size(1), 2);
-		//System.out.println(hiddenLayer);
-		
-		//INDArray outputLayer = getOutputLayer(hiddenLayer.size(1), 10);
+		// Intialize and sends training data and values at the hidden and output layer to trainingtechniques class.
+		List<INDArray> trainingData = loadTrainingFiles(",");
+		TrainingTechniques tt = new TrainingTechniques(trainingData, hiddenLayer, outputLayer);
 	}
 	
 	public void holdoutTraining(){
@@ -57,7 +63,7 @@ public class NeuralNetwork {
 		//iterator used to iterate over the trainingData of files in allTrainingFiles and remove all test currentFile names.
 		while(iter.hasNext()){
 			if(iter.next().contains("test"))
-					iter.remove();
+				iter.remove();
 		}
 		
 		INDArray currentFile = null;
@@ -88,7 +94,7 @@ public class NeuralNetwork {
 		//iterator used to iterate over the testData of files in allTestingFiles and remove all training currentFile names.
 		while(iter.hasNext()){
 			if(iter.next().contains("training"))
-					iter.remove();
+				iter.remove();
 		}
 		
 		INDArray currentFile = null;
@@ -112,20 +118,20 @@ public class NeuralNetwork {
      * @param numOfHiddenNeurons
      * @return
      */
-	public INDArray getHiddenLayer(int inputlayerSize, int numOfHiddenNeurons)
+	public INDArray createHiddenLayer(int numOfInputNeurons, int numOfHiddenNeurons)
 	{
 		
-		return new LayerCreation(inputlayerSize, numOfHiddenNeurons).getWeights();
+		return new LayerCreation(numOfInputNeurons, numOfHiddenNeurons).getWeights();
 	}
 	
 	/**
 	 * 
-	 * @param hiddenLayerSize
+	 * @param numOfHiddenNeurons
 	 * @param numOfOutputNeurons
 	 * @return
 	 */
-	public INDArray getOutputLayer(int hiddenLayerSize, int numOfOutputNeurons)
+	public INDArray createOutputLayer(int numOfHiddenNeurons, int numOfOutputNeurons)
 	{
-		return new LayerCreation(hiddenLayerSize, numOfOutputNeurons).getWeights();
+		return new LayerCreation(numOfHiddenNeurons, numOfOutputNeurons).getWeights();
 	}
 }

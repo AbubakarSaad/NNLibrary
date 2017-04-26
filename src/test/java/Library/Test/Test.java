@@ -51,7 +51,7 @@ public class Test {
 				System.out.println("----------------------Epoch: " + i + "--------------------------");
 				for(int j=0; j<inputLayer.size(0) - 399; j++)
 				{
-					ff.feedForward(inputLayer.getRow(j));
+					ff.forwardPass(inputLayer.getRow(j));
 					
 					hiddenLayerOutput = ff.getOutputofHiddenLayer();
 					outputLayerOutput = ff.getOutputofOutputLayer();
