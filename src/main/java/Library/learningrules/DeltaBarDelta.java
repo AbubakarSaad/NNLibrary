@@ -33,9 +33,10 @@ public class DeltaBarDelta {
 	}
 	
 	/**
-	 * This method implements the algorthim for deltabardelta but require gradient from gradient collector class
-	 * @param gradientForHidden - gradient for hidden layer
-	 * @param gradientForOutput - gradient for output layer
+	 * This method implements the algorithm for deltabardelta but requires a gradient 
+	 * from gradient collector class.
+	 * @param gradientForHidden - gradient for hidden layer.
+	 * @param gradientForOutput - gradient for output layer.
 	 */
 	public void Calculation(INDArray gradientForHidden, INDArray gradientForOutput)
 	{

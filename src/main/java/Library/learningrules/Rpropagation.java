@@ -34,9 +34,9 @@ public class Rpropagation {
 	}
 	
 	/**
-	 * This method performs calculations for rprop
-	 * @param gradientForHidden - gradient for hidden layer
-	 * @param gradientForOutput - gradient for output layer
+	 * This method that performs calculations for rProp.
+	 * @param gradientForHidden - gradient for hidden layer.
+	 * @param gradientForOutput - gradient for output layer.
 	 */
 	public void Calculation(INDArray gradientForHidden, INDArray gradientForOutput)
 	{
