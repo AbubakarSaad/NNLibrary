@@ -18,7 +18,8 @@ public class Backprop {
 	private double learningRate;
 	
 	/**
-	 * This is consturctor for backprop
+	 * This is the constructor for back propagation class which requires the
+	 * hiddenlayer weights, outputlayer weights and learning rate.
 	 * @param hiddenLayer
 	 * @param outputLayer
 	 */
@@ -28,7 +29,14 @@ public class Backprop {
 		this.outputLayerWeights = outputLayerWeights;
 		this.learningRate = learningRate;
 	 }
-	
+	/**
+	 * The second constructor used when bias is implemented for each layer.
+	 * @param hiddenLayerWeights
+	 * @param outputLayerWeights
+	 * @param learningRate
+	 * @param biasArrayH
+	 * @param biasArrayO 
+	 */
 	public Backprop(INDArray hiddenLayerWeights, INDArray outputLayerWeights, double learningRate, INDArray biasArrayH, INDArray biasArrayO)
 	 {
 		this.hiddenLayerWeights = hiddenLayerWeights;
@@ -39,14 +47,15 @@ public class Backprop {
 	 }
 	 
 	 /**
-	  * This method calculates the gradients 
-	  * This method calculatues the gradients, updates bias and the weights for layers  
-	  * @param outputLayerOutput
-	  * @param hiddenLayerOutput
-	  * @param errorAtOutput
-	  * @param sample
+	  * This method calculates the gradients, updates bias and the weights 
+	  * for layers.  
+	  * @param outputLayerOutput - values at the output layer.
+	  * @param hiddenLayerOutput -  values at the hidden layer.
+	  * @param errorAtOutput - the error that is found at the output layer and 
+	  * propagated back.
+	  * @param data - the one line of data being sent in from the training data.
 	  */
-	 public void calculations(INDArray outputLayerOutput, INDArray hiddenLayerOutput, INDArray errorAtOutput, INDArray sample)
+	 public void calculations(INDArray outputLayerOutput, INDArray hiddenLayerOutput, INDArray errorAtOutput, INDArray data)
 	 {
 		 // The output layer error contributions
 		 outputSigmoidedValues = func.sigmoid(outputLayerOutput, true);
@@ -55,8 +64,11 @@ public class Backprop {
 		 
 		 
 		 INDArray errorContrAtOutputT = errorContrAtOutput.transpose();
-		 
+		 System.out.println("error at output: " + errorContrAtOutput);
+		 System.out.println("error at outputT: " + errorContrAtOutputT);
+		 System.out.println("Hidden Layer Output:"+hiddenLayerOutput);
 		 gradientForOutput = errorContrAtOutputT.mmul(hiddenLayerOutput);
+		 System.out.println("Gradient outputlayer:" + gradientForOutput);
 		 gradientForOutput = (gradientForOutput.transpose()).muli(learningRate);
 		 
 		 // update the weights
@@ -77,7 +89,7 @@ public class Backprop {
 		 
 		 INDArray errorAtHiddenLayer = errorAtHidden.transpose();
 		 
-		 gradientForHidden = errorAtHiddenLayer.mmul(sample);
+		 gradientForHidden = errorAtHiddenLayer.mmul(data);
 		 gradientForHidden = (gradientForHidden.transpose()).muli(learningRate);
 		 
 		 hiddenLayerWeights = hiddenLayerWeights.sub(gradientForHidden);

@@ -2,19 +2,21 @@ package Library.functions;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.ops.transforms.Transforms;
-
+/**
+ * Contains the general functions and mathematical equations used in learning.
+ * @author Sulman and Abubakar
+ */
 public class Functions {
 
-	public Functions()
-	{
+	public Functions(){
 		
 	}
 	
 	/**
 	 * This is method for sigmoid
 	 * @param input - takes an array to apply sigmoid
-	 * @param x - true if the derivative of sigmoid required
-	 * @return - sigmoided values
+	 * @param x - true if the derivative of sigmoid required.
+	 * @return - sigmoided values.
 	 */
 	public INDArray sigmoid(INDArray input, Boolean x)
 	{

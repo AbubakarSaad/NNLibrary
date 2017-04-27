@@ -11,7 +11,12 @@ import java.util.logging.Logger;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
-
+/**
+ * This is the main class that connects all other classes, this is what the 
+ * user instantiates in the main class and calls whatever training method is
+ * needed.
+ * @author Sulman and Abubakar
+ */
 public class NeuralNetwork {
 	final String dir = System.getProperty("user.dir");
 	private int epochs = 0;
@@ -22,17 +27,37 @@ public class NeuralNetwork {
 	private INDArray outputLayerWeights = null;
 	private TrainingTechniques tt;
 	
+	/**
+	 * The first constructor which gives the option of putting a learning rate 
+	 * in.
+	 * @param hiddenLayerSize - specified by the user
+	 * @param outputLayerSize - specified by the user
+	 * @param epochs - specified by the user
+	 * @param learningRate - specified by the user
+	 */
 	public NeuralNetwork(int hiddenLayerSize, int outputLayerSize, int epochs, double learningRate){
 		this.epochs = epochs;
+		//Randomly generate the weight connections for both hidden and output
+		//layer
 		this.hiddenLayerWeights = createHiddenLayer(inputLayerSize, hiddenLayerSize);
 		this.outputLayerWeights = createOutputLayer(hiddenLayerSize, outputLayerSize);
 		
-		// Intialize and sends training data and values at the hidden and output layer to trainingtechniques class.
+		// Intialize and send training data and the values at the hidden and 
+		//outputlayer to trainingtechniques class.
 		List<INDArray> trainingData = loadTrainingFiles(",");
 		tt = new TrainingTechniques(trainingData, hiddenLayerWeights, outputLayerWeights, learningRate);
 		
 	}
-	
+	/**
+	 * This constructer is used when the user only wants bias or learning rate 
+	 * implemented. To choose you simply type in the last parameter a string 
+	 * either "bias" or "learning". 
+	 * @param hiddenLayerSize
+	 * @param outputLayerSize
+	 * @param epochs
+	 * @param learningRate
+	 * @param learningParam 
+	 */
 	public NeuralNetwork(int hiddenLayerSize, int outputLayerSize, int epochs, double learningRate, String learningParam){
 		this.epochs = epochs;
 		this.hiddenLayerWeights = createHiddenLayer(inputLayerSize, hiddenLayerSize);
@@ -43,7 +68,16 @@ public class NeuralNetwork {
 		tt = new TrainingTechniques(trainingData, hiddenLayerWeights, outputLayerWeights, learningRate, "bias");
 		
 	}
-	
+	/**
+	 * This constructer is used when the user would like to use all learning 
+	 * rules available in the library such as learningRate, bias and momentum.
+	 * @param hiddenLayerSize - specified by the user
+	 * @param outputLayerSize - specified by the user
+	 * @param epochs - specified by the user
+	 * @param learningRate - specified by the user
+	 * @param bias - specified by the user
+	 * @param momentum - specified by the user
+	 */
 	public NeuralNetwork(int hiddenLayerSize, int outputLayerSize, int epochs, double learningRate, String bias, String momentum){
 		this.epochs = epochs;
 		this.hiddenLayerWeights = createHiddenLayer(inputLayerSize, hiddenLayerSize);
@@ -54,11 +88,20 @@ public class NeuralNetwork {
 		tt = new TrainingTechniques(trainingData, hiddenLayerWeights, outputLayerWeights, learningRate);
 		
 	}
-	
+	/**
+	 * This method is what the user calls to run holdout training after the 
+	 * network has been initialized.
+	 */
 	public void holdoutTraining(){
 		tt.Holdout(epochs);
 	}
-	
+	/**
+	 * Loads all training and test file paths into a string list which is used 
+	 * later in loadTrainingFiles and loadTestingfiles.
+	 * @param path - the absolute path leading to the testing and training 
+	 * files.
+	 * @return - List<String> 
+	 */
 	public List<String> loadAllFiles(String path){
 		List<String> allFiles = new ArrayList<String>();
 		String directory = path;
@@ -75,7 +118,8 @@ public class NeuralNetwork {
 	/**
 	 * This method returns a list of type INDArray containing all the lines
 	 * of every training file.
-	 * @param delimeter - usually a comma that would be removed from the currentFile.
+	 * @param delimeter - usually a comma that would be removed from the 
+	 * currentFile.
 	 */
     public List<INDArray> loadTrainingFiles(String delimeter){
 		List<String> allTrainingFiles = new ArrayList<String>();
@@ -137,22 +181,29 @@ public class NeuralNetwork {
 	}
 	
     /**
-     * 
-     * @param inputlayerSize - size of the input layer 
-     * @param numOfHiddenNeurons
-     * @return
+     * This method creates the connection matrix between the input layer and 
+	 * hidden layer.
+     * @param inputlayerSize - size of the input layer which will be used as the 
+	 * first dimension of the array.
+     * @param numOfHiddenNeurons - size of the hidden layer that will be used
+	 * for the second dimension of the array.
+     * @return - returns a INDArray containing random weights varying from
+	 * -0.5 to 0.5.
      */
 	public INDArray createHiddenLayer(int numOfInputNeurons, int numOfHiddenNeurons)
 	{
-		
 		return new LayerCreation(numOfInputNeurons, numOfHiddenNeurons).getWeights();
 	}
 	
 	/**
-	 * 
-	 * @param numOfHiddenNeurons
-	 * @param numOfOutputNeurons
-	 * @return
+	 * This method creates the connection matrix between the hidden layer and 
+	 * output layer.
+	 * @param numOfHiddenNeurons - size of the hidden layer which is used as the
+	 * first dimension of the weight array.
+	 * @param numOfOutputNeurons - size of the output layer which is used as the
+	 * second dimension of the weight array.
+	 * @return - returns a INDArray containing random weights varying from
+	 * -0.5 to 0.5.
 	 */
 	public INDArray createOutputLayer(int numOfHiddenNeurons, int numOfOutputNeurons)
 	{

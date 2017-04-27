@@ -4,10 +4,16 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 
 import Library.functions.Functions;
 
+/**
+ * This class has the main feed forward logic and implementation. This class
+ * is called and used in the training techniques class for the various training
+ * techniques.
+ * @author Sulman and Abubakar
+ */
 public class FeedForward {
 
-	private INDArray hiddenlayer;
-	private INDArray outputlayer;
+	private INDArray hiddenLayerWeights;
+	private INDArray outputLayerWeights;
 	private INDArray biasArrayH;
 	private INDArray biasArrayO;
 	private Functions sig = new Functions();
@@ -17,39 +23,39 @@ public class FeedForward {
 	private INDArray outputLayerSValues;
 	
 	/**
-	 * This is the constructer for feedforward
-	 * @param hiddenLayer - holds the hiddenlayer 
-	 * @param outputLayer - holds the outputlayer
+	 * This is the constructor for feed forward which uses the val
+	 * @param hiddenLayerWeights - holds the hiddenLayerWeights values 
+	 * @param outputLayerWeights - holds the outputLayerWeights values
 	 */
-	public FeedForward(INDArray hiddenLayer, INDArray outputLayer)
+	public FeedForward(INDArray hiddenLayerWeights, INDArray outputLayerWeights)
 	{
-		this.hiddenlayer = hiddenLayer;
-		this.outputlayer = outputLayer;
+		this.hiddenLayerWeights = hiddenLayerWeights;
+		this.outputLayerWeights = outputLayerWeights;
 	}
 	
 	/**
-	 * This is the contructor for feedforward including the bias
-	 * @param hiddenLayer - holds the hiddenLayer weights
-	 * @param outputLayer - holds the outputLayer weights
-	 * @param biasArrayH - holds the bias values for hidden layer
-	 * @param biasArrayO - holds the bias values for output layer
+	 * This is the constructor for feed forward including the bias
+	 * @param hiddenLayerWeights - holds the hiddenLayerWeights weights
+	 * @param outputLayerWeights - holds the outputLayerWeights weights
+	 * @param biasArrayH - holds the bias values for hidden layer.
+	 * @param biasArrayO - holds the bias values for output layer.
 	 */
-	public FeedForward(INDArray hiddenLayer, INDArray outputLayer, INDArray biasArrayH, INDArray biasArrayO)
+	public FeedForward(INDArray hiddenLayerWeights, INDArray outputLayerWeights, INDArray biasArrayH, INDArray biasArrayO)
 	{
-		this.hiddenlayer = hiddenLayer;
-		this.outputlayer = outputLayer;
+		this.hiddenLayerWeights = hiddenLayerWeights;
+		this.outputLayerWeights = outputLayerWeights;
 		this.biasArrayH = biasArrayH;
 		this.biasArrayO = biasArrayO;
 	}
 	
 	/**
 	 * This method does the calculations for feed forward on the network
-	 * @param row - holds an input of the data 
+	 * @param row - holds a row of the training data.
 	 */
 	public void forwardPass(INDArray row)
 	{
 
-		dotproductatHidden = row.mmul(hiddenlayer);
+		dotproductatHidden = row.mmul(hiddenLayerWeights);
 		// bias require here for hidden layer
 		
 		if(biasArrayH != null)
@@ -57,15 +63,13 @@ public class FeedForward {
 			if(biasArrayH.size(0) > 0) dotproductatHidden = dotproductatHidden.add(biasArrayH);
 			
 		}
-		
-		
 		//if(biasArray.length() > 0) 
 		
 		// Sigmoided Values
 		hiddenLayerSValues = sig.sigmoid(dotproductatHidden, false);
 		
-		// dotproduct for summation of the hiddenlayer and weights (hiddenLayer to outputlayer)
-		dotproductatOutput = hiddenLayerSValues.mmul(outputlayer);
+		// dotproduct for summation of the hiddenLayerWeights and weights (hiddenLayer to outputLayerWeights)
+		dotproductatOutput = hiddenLayerSValues.mmul(outputLayerWeights);
 		
 		// bias for output layer 
 		if(biasArrayO != null)
