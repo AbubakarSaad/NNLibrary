@@ -22,13 +22,13 @@ public class LayerCreation {
     {
     	Nd4j.setDataType(DataBuffer.Type.FLOAT);
         // Nd4j.rand(rows, columns, min, max, random)
-    	float[][] matrix = new float[numberofInputs][numberofHidden];
+    	long[][] matrix = new long[numberofInputs][numberofHidden];
     	for(int i=0; i<matrix.length; i++)
     	{
     		for(int j=0; j<matrix[i].length; j++)
     		{
     			Random rand = new Random();
-    			matrix[i][j] = (float) (rand.nextFloat() * (0.5 - (-0.5)) + (-0.5));
+    			matrix[i][j] = (long) (rand.nextLong() * (0.5 - (-0.5)) + (-0.5));
     		}
     	}
     	

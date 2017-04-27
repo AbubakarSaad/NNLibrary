@@ -70,10 +70,9 @@ public class Backprop {
 		 
 		 INDArray erroutputLayer = erroratoutputLayer.transpose();
 		 
-		 INDArray deltao = erroutputLayer.mmul(hiddenLayerOutput);
-		 deltao.assign(deltao.transpose());
-		 deltao.assign(deltao.mul(learningRate));
-		 INDArray deltao2 = outputLayerWeights.sub(deltao);
+		 INDArray deltao = (erroutputLayer.mmul(hiddenLayerOutput)).transpose();
+		 INDArray deltao1 = deltao.mul(learningRate);
+		 INDArray deltao2 = outputLayerWeights.sub(deltao1);
 		 outputLayerWeights.assign(deltao2);
 		 
 		 
@@ -87,19 +86,15 @@ public class Backprop {
 		 
 		 
 		 INDArray errHiddenLayer = errorHiddenLayer.transpose();
-		 INDArray deltah = errHiddenLayer.mmul(data);
-		 deltah.assign(deltah.transpose());
-		 deltah.assign(deltah.mul(learningRate));
-		 INDArray deltah2 = hiddenLayerWeights.sub(deltah);
+		 INDArray deltah = (errHiddenLayer.mmul(data)).transpose();
+		 INDArray deltah1 = deltah.mul(learningRate);
+		 INDArray deltah2 = hiddenLayerWeights.sub(deltah1);
 		 hiddenLayerWeights.assign(deltah2);
 		 
 		 INDArray deltaoh = errorHiddenLayer.mul(learningRate);
 		 INDArray deltaoh2 = biasArrayH.sub(deltaoh);
 		 deltabiasArrayH.assign(deltaoh2);
-		 
-		 
-		 
-		 
+
 	 }
 	 
 	 /**
@@ -120,11 +115,19 @@ public class Backprop {
 		 return outputLayerWeights;
 	 }
 	 
+	 /**
+	  * This method returns the updated bias for hidden layer
+	  * @return - deltabiasArrayH: holds hidden layer values
+	  */
 	 public INDArray getBiasArrayForHidden()
 	 {
 		 return deltabiasArrayH;
 	 }
 	 
+	 /**
+	  * This method returns the updated bias for output layer
+	  * @return - deltabiasArrayO: holds output layer values
+	  */
 	 public INDArray getBiasArrayForOutput()
 	 {
 		 return deltabiasArrayO;

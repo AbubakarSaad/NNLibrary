@@ -20,6 +20,8 @@ public class Main {
 		
 		NeuralNetwork NNB = new NeuralNetwork(25, 10, 3, 0.5, "bias");
 		NNB.holdoutTraining();
+		
+		NNB.deltabardelta();
 
 		
     }

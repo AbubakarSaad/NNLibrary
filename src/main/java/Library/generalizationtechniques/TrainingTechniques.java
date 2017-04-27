@@ -91,8 +91,12 @@ public class TrainingTechniques {
 				accuracy(randomIndex.get(j), ff.getOutputofOutputLayer());
 			
 				bp.calculations(outputofOutputLayer, ouputofHiddenLayer, errorAtOutput, trainingData.get(randomIndex.get(j)));
-				hiddenLayerWeights.assign(bp.getUpdatedHiddenLayerWeights());
-				outputLayerWeights.assign(bp.getUpdatedOutputLayerWeights());
+				
+				INDArray updatedHiddenWeights = bp.getUpdatedHiddenLayerWeights();
+				INDArray updatedOutputWeights = bp.getUpdatedOutputLayerWeights();
+				hiddenLayerWeights.assign(updatedHiddenWeights);
+				outputLayerWeights.assign(updatedOutputWeights);
+				System.out.println(outputLayerWeights);
 
 				//biasArrayH.assign(bp.getBiasArrayForHidden());
 				//biasArrayO.assign(bp.getBiasArrayForOutput());
@@ -150,7 +154,7 @@ public class TrainingTechniques {
 	{
 		INDArray graidentForH = Nd4j.zeros(hiddenLayerWeights.size(0), hiddenLayerWeights.size(1));
 		INDArray graidentForO = Nd4j.zeros(outputLayerWeights.size(0), outputLayerWeights.size(1));
-		GradientCollector gc = new GradientCollector();
+		GradientCollector gc = new GradientCollector(hiddenLayerWeights, outputLayerWeights);
 		Rpropagation rprop = new Rpropagation(nNeg, nPos, hiddenLayerWeights, outputLayerWeights);
 		for(int i = 0; i < epochs; i++){
 			ArrayList<Integer> randomIndex = trainingIndexArray();
@@ -191,7 +195,7 @@ public class TrainingTechniques {
 	{
 		INDArray graidentForH = Nd4j.zeros(hiddenLayerWeights.size(0), hiddenLayerWeights.size(1));
 		INDArray graidentForO = Nd4j.zeros(outputLayerWeights.size(0), outputLayerWeights.size(1));
-		GradientCollector gc = new GradientCollector();
+		GradientCollector gc = new GradientCollector(hiddenLayerWeights, outputLayerWeights);
 		DeltaBarDelta deltaBar = new DeltaBarDelta(dDecay, kGrowth, hiddenLayerWeights, outputLayerWeights);
 		for(int i = 0; i < epochs; i++){
 			ArrayList<Integer> randomIndex = trainingIndexArray();
