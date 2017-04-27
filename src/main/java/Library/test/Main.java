@@ -12,7 +12,6 @@ public class Main {
 	// parameters order: hiddenLayerSize, outputLayerSize, epochs, learning rate, bias.
 		NeuralNetwork NN = new NeuralNetwork(25, 10, 1, 0.2);
 		NN.holdoutTraining();
-		
 		//NeuralNetwork NNB = new NeuralNetwork(10, 10, 1, 0.05, "bias");
 		//NNB.holdoutTraining();
 		

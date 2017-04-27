@@ -49,7 +49,7 @@ public class NeuralNetwork {
 		
 	}
 	/**
-	 * This constructer is used when the user only wants bias or learning rate 
+	 * This constructor is used when the user only wants bias or learning rate 
 	 * implemented. To choose you simply type in the last parameter a string 
 	 * either "bias" or "learning". 
 	 * @param hiddenLayerSize
