@@ -38,8 +38,7 @@ public class GradientCollector {
 		 
 		 INDArray errorContrAtOutputT = errorContrAtOutput.transpose();
 		 
-		 gradientForOutput = errorContrAtOutputT.mmul(hiddenLayerOutput);
-		 gradientForOutput = gradientForOutput.transpose();
+		 gradientForOutput = (errorContrAtOutputT.mmul(hiddenLayerOutput)).transpose();
 		 
 		 
 		 
@@ -52,8 +51,7 @@ public class GradientCollector {
 		 
 		 
 		 INDArray errAtHidden = errorAtHidden.transpose();
-		 gradientForHidden = errAtHidden.mmul(sample);
-		 gradientForHidden = gradientForHidden.transpose();
+		 gradientForHidden = (errAtHidden.mmul(sample)).transpose();
 	}
 	
 	
