@@ -11,11 +11,13 @@ public class Main {
 	public Main()
     {
 		// parameters order: hiddenLayerSize, outputLayerSize, epochs. 
-		NeuralNetwork NN = new NeuralNetwork(10, 10, 1, 0.05);
-		NN.holdoutTraining();
+
+//		NeuralNetwork NN = new NeuralNetwork(25, 10, 1, 0.1);
+//		NN.holdoutTraining();
 		
-//		NeuralNetwork NNB = new NeuralNetwork(10, 10, 1, 0.05, "bias");
-//		NNB.holdoutTraining();
+		NeuralNetwork NNB = new NeuralNetwork(25, 10, 2, 0.2, "bias");
+		NNB.holdoutTraining();
+
 		
     }
     

@@ -29,7 +29,7 @@ public class NeuralNetwork {
 		
 		// Intialize and sends training data and values at the hidden and output layer to trainingtechniques class.
 		List<INDArray> trainingData = loadTrainingFiles(",");
-		tt = new TrainingTechniques(trainingData, hiddenLayerWeights, outputLayerWeights, learningRate);
+		tt = new TrainingTechniques(trainingData, this.hiddenLayerWeights, this.outputLayerWeights, learningRate);
 		
 	}
 	
@@ -57,7 +57,6 @@ public class NeuralNetwork {
 	
 	public void holdoutTraining(){
 		tt.Holdout(epochs);
-		System.out.println("Reached");
 	}
 	
 	public List<String> loadAllFiles(String path){

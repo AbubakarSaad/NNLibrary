@@ -19,7 +19,7 @@ public class LayerCreation {
     {
 
         // Nd4j.rand(rows, columns, min, max, random)
-        weights = Nd4j.rand(numberofInputs, numberofHidden, -0.5, 0.5, Nd4j.getRandom());
+        weights = Nd4j.rand(numberofInputs, numberofHidden, (-0.5), 0.5, Nd4j.getRandom());
         
     }
     
