@@ -14,15 +14,11 @@ public class Main {
     {
 
 	// parameters order: hiddenLayerSize, outputLayerSize, epochs, learning rate, bias.	
-//		NeuralNetwork NN = new NeuralNetwork(25, 10, 1, 0.2);
-//		NN.holdoutTraining();
-
-
+		NeuralNetwork NNB = new NeuralNetwork(25, 10, 30, 0.05, "bias", true, 0.2);
+		NNB.holdoutTraining();
 		
-		NeuralNetwork NNB = new NeuralNetwork(25, 10, 30, 0.05, "bias");
-		//NNB.holdoutTraining();
-		
-		NNB.deltabardelta();
+		//NNB.deltabardelta();
+		//NNB.rprop(
 
 
 		

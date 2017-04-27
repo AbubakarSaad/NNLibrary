@@ -66,6 +66,24 @@ public class TrainingTechniques {
 		//System.out.println("begin weight: \n" + outputLayerWeights);
 
 	}
+	
+	public TrainingTechniques(List<INDArray> trainingData, INDArray hiddenLayerWeights, INDArray outputLayerWeights, double learningRate, String learningParams, Boolean momentum, double momentumV){
+		this.hiddenLayerWeights = hiddenLayerWeights;
+		this.outputLayerWeights = outputLayerWeights;
+		this.trainingData = trainingData;
+		//trainingIndexArray();
+		if (learningParams == "bias")
+		{
+			biasArrayH = Nd4j.rand(1, this.hiddenLayerWeights.size(1), -0.5, 0.5, Nd4j.getRandom());
+			biasArrayO = Nd4j.rand(1, this.outputLayerWeights.size(1), -0.5, 0.5, Nd4j.getRandom());
+		}
+		
+		ff =  new FeedForward(this.hiddenLayerWeights,this.outputLayerWeights, biasArrayH, biasArrayO);
+		bp = new Backprop(this.hiddenLayerWeights, this.outputLayerWeights, learningRate, biasArrayH, biasArrayO, momentum, momentumV);
+		//System.out.println("hiddenLayerweight began: \n"+hiddenLayerWeights);
+		//System.out.println("begin weight: \n" + outputLayerWeights);
+
+	}
 	/**
 	 * The main implementation of the holdout method which is called in the 
 	 * NeuralNetwork class, has an outer epoch loop which is controlled by the 

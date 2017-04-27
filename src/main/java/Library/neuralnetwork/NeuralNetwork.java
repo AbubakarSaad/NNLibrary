@@ -67,7 +67,7 @@ public class NeuralNetwork {
 		
 		// Intialize and sends training data and values at the hidden and output layer to trainingtechniques class.
 		List<INDArray> trainingData = loadTrainingFiles(",");
-		tt = new TrainingTechniques(trainingData, hiddenLayerWeights, outputLayerWeights, learningRate, "bias");
+		tt = new TrainingTechniques(trainingData, hiddenLayerWeights, outputLayerWeights, learningRate, learningParam);
 		
 	}
 	/**
@@ -80,7 +80,7 @@ public class NeuralNetwork {
 	 * @param bias - specified by the user
 	 * @param momentum - specified by the user
 	 */
-	public NeuralNetwork(int hiddenLayerSize, int outputLayerSize, int epochs, double learningRate, String bias, String momentum){
+	public NeuralNetwork(int hiddenLayerSize, int outputLayerSize, int epochs, double learningRate, String bias, Boolean momentum, double momentumV){
 		Nd4j.setDataType(DataBuffer.Type.DOUBLE);
 		this.epochs = epochs;
 		this.hiddenLayerWeights = createHiddenLayer(inputLayerSize, hiddenLayerSize);
@@ -88,7 +88,7 @@ public class NeuralNetwork {
 		
 		// Intialize and sends training data and values at the hidden and output layer to trainingtechniques class.
 		List<INDArray> trainingData = loadTrainingFiles(",");
-		tt = new TrainingTechniques(trainingData, hiddenLayerWeights, outputLayerWeights, learningRate);
+		tt = new TrainingTechniques(trainingData, hiddenLayerWeights, outputLayerWeights, learningRate, bias, momentum, momentumV);
 		
 	}
 	/**
