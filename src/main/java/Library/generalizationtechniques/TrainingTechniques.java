@@ -96,10 +96,10 @@ public class TrainingTechniques {
 				INDArray updatedOutputWeights = bp.getUpdatedOutputLayerWeights();
 				hiddenLayerWeights.assign(updatedHiddenWeights);
 				outputLayerWeights.assign(updatedOutputWeights);
-				System.out.println(outputLayerWeights);
+				//System.out.println(outputLayerWeights);
 
-				//biasArrayH.assign(bp.getBiasArrayForHidden());
-				//biasArrayO.assign(bp.getBiasArrayForOutput());
+				biasArrayH.assign(bp.getBiasArrayForHidden());
+				biasArrayO.assign(bp.getBiasArrayForOutput());
 			}
 			System.out.println("Epoch: " + i);
 			System.out.println("Accuracy per Epoch: " + correctAnswer / trainingData.size());

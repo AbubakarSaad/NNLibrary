@@ -18,10 +18,10 @@ public class Main {
 //		NN.holdoutTraining();
 
 		
-		NeuralNetwork NNB = new NeuralNetwork(25, 10, 3, 0.5, "bias");
+		NeuralNetwork NNB = new NeuralNetwork(25, 10, 10, 0.05, "bias");
 		NNB.holdoutTraining();
 		
-		NNB.deltabardelta();
+		//NNB.deltabardelta();
 
 		
     }

@@ -65,23 +65,25 @@ public class Backprop {
 	 public void calculations(INDArray outputLayerOutput, INDArray hiddenLayerOutput, INDArray errorAtOutput, INDArray data)
 	 {
 		 INDArray outputLayerWeightsCopy = outputLayerWeights;
+		 
 		 INDArray outo1neto1 = func.sigmoid(outputLayerOutput, true);
 		 INDArray erroratoutputLayer = outo1neto1.mul(errorAtOutput);
 		 
+		 
 		 INDArray erroutputLayer = erroratoutputLayer.transpose();
+		
 		 
 		 INDArray deltao = (erroutputLayer.mmul(hiddenLayerOutput)).transpose();
 		 INDArray deltao1 = deltao.mul(learningRate);
 		 INDArray deltao2 = outputLayerWeights.sub(deltao1);
-		 outputLayerWeights.assign(deltao2);
-		 
+	
 		 
 		 INDArray deltaob = erroratoutputLayer.mul(learningRate);
 		 INDArray deltaob2 = biasArrayO.sub(deltaob);
 		 deltabiasArrayO.assign(deltaob2);
 		 
 		 INDArray errorContr = erroratoutputLayer.mmul(outputLayerWeightsCopy.transpose());
-		 INDArray bi = func.sigmoid(errorContr, true);
+		 INDArray bi = func.sigmoid(hiddenLayerOutput, true);
 		 INDArray errorHiddenLayer = errorContr.mul(bi);
 		 
 		 
@@ -94,6 +96,8 @@ public class Backprop {
 		 INDArray deltaoh = errorHiddenLayer.mul(learningRate);
 		 INDArray deltaoh2 = biasArrayH.sub(deltaoh);
 		 deltabiasArrayH.assign(deltaoh2);
+		 
+		 outputLayerWeights.assign(deltao2);
 
 	 }
 	 
