@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.nd4j.linalg.api.buffer.DataBuffer;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
@@ -45,7 +47,7 @@ public class NeuralNetwork {
 		// Intialize and send training data and the values at the hidden and 
 		//outputlayer to trainingtechniques class.
 		List<INDArray> trainingData = loadTrainingFiles(",");
-		tt = new TrainingTechniques(trainingData, hiddenLayerWeights, outputLayerWeights, learningRate);
+		tt = new TrainingTechniques(trainingData, this.hiddenLayerWeights, this.outputLayerWeights, learningRate);
 		
 	}
 	/**
@@ -79,6 +81,7 @@ public class NeuralNetwork {
 	 * @param momentum - specified by the user
 	 */
 	public NeuralNetwork(int hiddenLayerSize, int outputLayerSize, int epochs, double learningRate, String bias, String momentum){
+		Nd4j.setDataType(DataBuffer.Type.DOUBLE);
 		this.epochs = epochs;
 		this.hiddenLayerWeights = createHiddenLayer(inputLayerSize, hiddenLayerSize);
 		this.outputLayerWeights = createOutputLayer(hiddenLayerSize, outputLayerSize);
@@ -95,6 +98,22 @@ public class NeuralNetwork {
 	public void holdoutTraining(){
 		tt.Holdout(epochs);
 	}
+	
+	/**
+	 * This method is what the user calls to run batch training with rprop
+	 */
+	public void rprop(){
+		tt.batchTraining(epochs, 1.2, 0.5);
+	}
+	
+	/**
+	 * This method is what user calls to run batch training with delta_bar_delta
+	 */
+	public void deltabardelta()
+	{
+		tt.batchTrainingD(epochs, 0.20, 0.0001);
+	}
+	
 	/**
 	 * Loads all training and test file paths into a string list which is used 
 	 * later in loadTrainingFiles and loadTestingfiles.

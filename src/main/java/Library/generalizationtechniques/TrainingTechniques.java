@@ -1,7 +1,11 @@
 
 package Library.generalizationtechniques;
 import Library.learningrules.Backprop;
+import Library.learningrules.DeltaBarDelta;
 import Library.learningrules.FeedForward;
+import Library.learningrules.GradientCollector;
+import Library.learningrules.Rpropagation;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -32,9 +36,10 @@ public class TrainingTechniques {
 		this.outputLayerWeights = outputLayerWeights;
 		this.trainingData = trainingData;
 		
-		ff =  new FeedForward(hiddenLayerWeights, outputLayerWeights);
+		ff =  new FeedForward(this.hiddenLayerWeights, this.outputLayerWeights);
 		bp = new Backprop(hiddenLayerWeights, outputLayerWeights, learningRate);
-		//System.out.println("hiddenLayerweight began: \n"+hiddenLayerWeights);
+		//System.out.println("begin weight: \n" + outputLayerWeights);
+		
 	}
 	
 	/**
@@ -54,8 +59,12 @@ public class TrainingTechniques {
 			biasArrayH = Nd4j.rand(1, this.hiddenLayerWeights.size(1), -0.5, 0.5, Nd4j.getRandom());
 			biasArrayO = Nd4j.rand(1, this.outputLayerWeights.size(1), -0.5, 0.5, Nd4j.getRandom());
 		}
-		ff =  new FeedForward(hiddenLayerWeights, outputLayerWeights, biasArrayH, biasArrayO);
-		bp = new Backprop(hiddenLayerWeights, outputLayerWeights, learningRate);
+		
+		ff =  new FeedForward(this.hiddenLayerWeights,this.outputLayerWeights, biasArrayH, biasArrayO);
+		bp = new Backprop(this.hiddenLayerWeights, this.outputLayerWeights, learningRate, biasArrayH, biasArrayO);
+		//System.out.println("hiddenLayerweight began: \n"+hiddenLayerWeights);
+		//System.out.println("begin weight: \n" + outputLayerWeights);
+
 	}
 	/**
 	 * The main implementation of the holdout method which is called in the 
@@ -69,19 +78,34 @@ public class TrainingTechniques {
 		for(int i = 0; i < epochs; i++){
 			ArrayList<Integer> randomIndex = trainingIndexArray();
 			correctAnswer = 0;
-			for(int j = 0; j < trainingData.size()-6997; j++){
+
+			
+			for(int j = 0; j < trainingData.size(); j++){
+
 				ff.forwardPass(trainingData.get(randomIndex.get(j)));
-				INDArray errorAtOutput = ff.getOutputofOutputLayer().sub(expectedOutput(randomIndex.get(j)));
-				accuracy(randomIndex.get(j));
-				bp.calculations(ff.getOutputofOutputLayer(), ff.getOutputofHiddenLayer(), errorAtOutput, trainingData.get(randomIndex.get(j)));
-				hiddenLayerWeights = bp.getUpdatedHiddenLayerWeights();
-				outputLayerWeights = bp.getUpdatedOutputLayerWeights();	
+				INDArray outputofOutputLayer = ff.getOutputofOutputLayer();
+				INDArray ouputofHiddenLayer = ff.getOutputofHiddenLayer();
 				
+				INDArray errorAtOutput = outputofOutputLayer.sub(expectedOutput(randomIndex.get(j)));
+				
+				accuracy(randomIndex.get(j), ff.getOutputofOutputLayer());
+			
+				bp.calculations(outputofOutputLayer, ouputofHiddenLayer, errorAtOutput, trainingData.get(randomIndex.get(j)));
+				
+				INDArray updatedHiddenWeights = bp.getUpdatedHiddenLayerWeights();
+				INDArray updatedOutputWeights = bp.getUpdatedOutputLayerWeights();
+				hiddenLayerWeights.assign(updatedHiddenWeights);
+				outputLayerWeights.assign(updatedOutputWeights);
+				System.out.println(outputLayerWeights);
+
+				//biasArrayH.assign(bp.getBiasArrayForHidden());
+				//biasArrayO.assign(bp.getBiasArrayForOutput());
 			}
 			System.out.println("Epoch: " + i);
 			System.out.println("Accuracy per Epoch: " + correctAnswer / trainingData.size());
 		}
 	}
+	
 	/**
 	 * Creates a randomized list of integers based on the number of training
 	 * examples.
@@ -95,19 +119,22 @@ public class TrainingTechniques {
 		Collections.shuffle(randomIndex);
 		return randomIndex;
 	}
+
 	/**
 	 * Tracks the accuracy of the the current epoch using a counter.
 	 * @param index 
 	 */
-	public void accuracy(int index){
+	public void accuracy(int index, INDArray output){
 		INDArray target = expectedOutput(index);
-		INDArray outputLayerValues = ff.getOutputofOutputLayer();
+		INDArray outputLayerValues = output;
+		//System.out.println("output values: " + outputLayerValues);
 		
 		for(int i = 0; i <target.size(1); i++){
 			if(target.getDouble(i) == 1){
+
 				if(outputLayerValues.getDouble(i) > 0.50){
 					if(outputLayerValues.getDouble(i) == outputLayerValues.maxNumber().doubleValue()){
-						System.out.println("Target array:" + target);
+						//System.out.println("Target array:" + target);
 						correctAnswer++;
 						break;
 					}
@@ -115,6 +142,88 @@ public class TrainingTechniques {
 			}
 		}
 	}	
+	
+	
+	/**
+	 * This method performs Rprop with the batch training
+	 * @param epochs - number of epochs 
+	 * @param nNeg - N Negtive
+	 * @param nPos - N Positive
+	 */
+	public void batchTraining(int epochs, double nNeg, double nPos)
+	{
+		INDArray graidentForH = Nd4j.zeros(hiddenLayerWeights.size(0), hiddenLayerWeights.size(1));
+		INDArray graidentForO = Nd4j.zeros(outputLayerWeights.size(0), outputLayerWeights.size(1));
+		GradientCollector gc = new GradientCollector(hiddenLayerWeights, outputLayerWeights);
+		Rpropagation rprop = new Rpropagation(nNeg, nPos, hiddenLayerWeights, outputLayerWeights);
+		for(int i = 0; i < epochs; i++){
+			ArrayList<Integer> randomIndex = trainingIndexArray();
+			correctAnswer = 0;
+			
+			for(int j = 0; j < trainingData.size(); j++){
+
+				ff.forwardPass(trainingData.get(randomIndex.get(j)));
+				INDArray outputofOutputLayer = ff.getOutputofOutputLayer();
+				INDArray ouputofHiddenLayer = ff.getOutputofHiddenLayer();
+				
+				INDArray errorAtOutput = outputofOutputLayer.sub(expectedOutput(randomIndex.get(j)));
+				
+				accuracy(randomIndex.get(j), ff.getOutputofOutputLayer());
+				gc.gradients(outputofOutputLayer, ouputofHiddenLayer, errorAtOutput, trainingData.get(randomIndex.get(j)));
+				
+				graidentForH.assign(graidentForH.add(gc.getGradientForHidden()));
+				graidentForO.assign(graidentForO.add(gc.getGradientForOutput()));
+				
+
+				//biasArrayH.assign(bp.getBiasArrayForHidden());
+				//biasArrayO.assign(bp.getBiasArrayForOutput());
+			}
+			rprop.Calculation(graidentForH, graidentForO);
+			System.out.println("Epoch: " + i);
+			System.out.println("Accuracy per Epoch: " + correctAnswer / trainingData.size());
+		}
+		
+	}
+	
+	/**
+	 * This method calculates deltabardelta with batch training
+	 * @param epochs
+	 * @param dDecay
+	 * @param kGrowth
+	 */
+	public void batchTrainingD(int epochs, double dDecay, double kGrowth)
+	{
+		INDArray graidentForH = Nd4j.zeros(hiddenLayerWeights.size(0), hiddenLayerWeights.size(1));
+		INDArray graidentForO = Nd4j.zeros(outputLayerWeights.size(0), outputLayerWeights.size(1));
+		GradientCollector gc = new GradientCollector(hiddenLayerWeights, outputLayerWeights);
+		DeltaBarDelta deltaBar = new DeltaBarDelta(dDecay, kGrowth, hiddenLayerWeights, outputLayerWeights);
+		for(int i = 0; i < epochs; i++){
+			ArrayList<Integer> randomIndex = trainingIndexArray();
+			correctAnswer = 0;
+			
+			for(int j = 0; j < trainingData.size(); j++){
+
+				ff.forwardPass(trainingData.get(randomIndex.get(j)));
+				INDArray outputofOutputLayer = ff.getOutputofOutputLayer();
+				INDArray ouputofHiddenLayer = ff.getOutputofHiddenLayer();
+				
+				INDArray errorAtOutput = outputofOutputLayer.sub(expectedOutput(randomIndex.get(j)));
+				
+				accuracy(randomIndex.get(j), ff.getOutputofOutputLayer());
+				
+				gc.gradients(outputofOutputLayer, ouputofHiddenLayer, errorAtOutput, trainingData.get(randomIndex.get(j)));
+				graidentForH.assign(graidentForH.add(gc.getGradientForHidden()));
+				graidentForO.assign(graidentForO.add(gc.getGradientForOutput()));
+				
+
+				//biasArrayH.assign(bp.getBiasArrayForHidden());
+				//biasArrayO.assign(bp.getBiasArrayForOutput());
+			}
+			deltaBar.Calculation(graidentForH, graidentForO);
+			System.out.println("Epoch: " + i);
+			System.out.println("Accuracy per Epoch: " + correctAnswer / trainingData.size());
+		}
+	}
 
 	public void k_foldCrossValidation(int epochs, int k){
 		for(int i = 0; i < epochs; i++){

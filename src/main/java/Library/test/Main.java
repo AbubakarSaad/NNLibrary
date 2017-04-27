@@ -1,4 +1,7 @@
 package Library.test;
+import org.nd4j.linalg.api.buffer.DataBuffer;
+import org.nd4j.linalg.factory.Nd4j;
+
 import Library.neuralnetwork.NeuralNetwork;
 
 /**
@@ -9,16 +12,23 @@ import Library.neuralnetwork.NeuralNetwork;
 public class Main {
 	public Main()
     {
-	// parameters order: hiddenLayerSize, outputLayerSize, epochs, learning rate, bias.
-		NeuralNetwork NN = new NeuralNetwork(25, 10, 1, 0.2);
-		NN.holdoutTraining();
-		//NeuralNetwork NNB = new NeuralNetwork(10, 10, 1, 0.05, "bias");
-		//NNB.holdoutTraining();
+
+	// parameters order: hiddenLayerSize, outputLayerSize, epochs, learning rate, bias.	
+//		NeuralNetwork NN = new NeuralNetwork(25, 10, 1, 0.2);
+//		NN.holdoutTraining();
+
+		NeuralNetwork NNB = new NeuralNetwork(25, 10, 3, 0.5, "bias");
+		NNB.holdoutTraining();
+		
+		NNB.deltabardelta();
+
+
 		
     }
     
     public static void main( String[] args )
     {
+    	Nd4j.setDataType(DataBuffer.Type.FLOAT);
         new Main();
     }
 }

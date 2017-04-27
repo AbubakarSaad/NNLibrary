@@ -1,6 +1,7 @@
 package Library.learningrules;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.api.ops.impl.accum.Dot;
 
 import Library.functions.Functions;
 
@@ -17,9 +18,7 @@ public class FeedForward {
 	private INDArray biasArrayH;
 	private INDArray biasArrayO;
 	private Functions sig = new Functions();
-	private INDArray dotproductatHidden;
 	private INDArray hiddenLayerSValues;
-	private INDArray dotproductatOutput;
 	private INDArray outputLayerSValues;
 	
 	/**
@@ -31,6 +30,7 @@ public class FeedForward {
 	{
 		this.hiddenLayerWeights = hiddenLayerWeights;
 		this.outputLayerWeights = outputLayerWeights;
+
 	}
 	
 	/**
@@ -42,6 +42,7 @@ public class FeedForward {
 	 */
 	public FeedForward(INDArray hiddenLayerWeights, INDArray outputLayerWeights, INDArray biasArrayH, INDArray biasArrayO)
 	{
+
 		this.hiddenLayerWeights = hiddenLayerWeights;
 		this.outputLayerWeights = outputLayerWeights;
 		this.biasArrayH = biasArrayH;
@@ -55,29 +56,18 @@ public class FeedForward {
 	public void forwardPass(INDArray row)
 	{
 
-		dotproductatHidden = row.mmul(hiddenLayerWeights);
-		// bias require here for hidden layer
+		INDArray inputLayer = row;
 		
-		if(biasArrayH != null)
-		{
-			if(biasArrayH.size(0) > 0) dotproductatHidden = dotproductatHidden.add(biasArrayH);
-			
-		}
-		//if(biasArray.length() > 0) 
+		INDArray dotproductH = inputLayer.mmul(hiddenLayerWeights);
+		INDArray sumh = dotproductH.add(biasArrayH);
+
+		hiddenLayerSValues = sig.sigmoid(sumh, false);
 		
-		// Sigmoided Values
-		hiddenLayerSValues = sig.sigmoid(dotproductatHidden, false);
+		INDArray dotproductO = hiddenLayerSValues.mmul(outputLayerWeights);
+		INDArray sumo = dotproductO.add(biasArrayO);
+
 		
-		// dotproduct for summation of the hiddenLayerWeights and weights (hiddenLayer to outputLayerWeights)
-		dotproductatOutput = hiddenLayerSValues.mmul(outputLayerWeights);
-		
-		// bias for output layer 
-		if(biasArrayO != null)
-		{
-			if(biasArrayO.size(0) > 0) dotproductatHidden = dotproductatHidden.add(biasArrayO);
-		}
-		// output layer sigmoided values
-		outputLayerSValues = sig.sigmoid(dotproductatOutput, false);
+		outputLayerSValues = sig.sigmoid(sumo, false);
 	}
 	
 	/**

@@ -1,11 +1,13 @@
 package Library.learningrules;
 
+import org.nd4j.linalg.api.buffer.DataBuffer;
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
 
 import Library.functions.Functions;
 
 public class Backprop {
-
+	
 	private INDArray outputSigmoidedValues;
 	private INDArray errorContrAtOutput;
 	Functions func = new Functions();
@@ -16,7 +18,8 @@ public class Backprop {
 	private INDArray biasArrayH;
 	private INDArray biasArrayO;
 	private double learningRate;
-	
+	private INDArray deltabiasArrayH;
+	private INDArray deltabiasArrayO;
 	/**
 	 * This is the constructor for back propagation class which requires the
 	 * hiddenlayer weights, outputlayer weights and learning rate.
@@ -25,17 +28,19 @@ public class Backprop {
 	 */
 	public Backprop(INDArray hiddenLayerWeights, INDArray outputLayerWeights, double learningRate)
 	 {
+		
 		this.hiddenLayerWeights = hiddenLayerWeights;
 		this.outputLayerWeights = outputLayerWeights;
 		this.learningRate = learningRate;
 	 }
+
 	/**
 	 * The second constructor used when bias is implemented for each layer.
 	 * @param hiddenLayerWeights
 	 * @param outputLayerWeights
 	 * @param learningRate
 	 * @param biasArrayH
-	 * @param biasArrayO 
+	 * @param biasArrayO
 	 */
 	public Backprop(INDArray hiddenLayerWeights, INDArray outputLayerWeights, double learningRate, INDArray biasArrayH, INDArray biasArrayO)
 	 {
@@ -44,6 +49,8 @@ public class Backprop {
 		this.biasArrayH = biasArrayH;
 		this.biasArrayO = biasArrayO;
 		this.learningRate = learningRate;
+		deltabiasArrayH = Nd4j.zeros(1, this.biasArrayH.size(1));
+		deltabiasArrayO = Nd4j.zeros(1, this.biasArrayO.size(1));
 	 }
 	 
 	 /**
@@ -57,51 +64,37 @@ public class Backprop {
 	  */
 	 public void calculations(INDArray outputLayerOutput, INDArray hiddenLayerOutput, INDArray errorAtOutput, INDArray data)
 	 {
-		 // The output layer error contributions
-		 outputSigmoidedValues = func.sigmoid(outputLayerOutput, true);
+		 INDArray outputLayerWeightsCopy = outputLayerWeights;
+		 INDArray outo1neto1 = func.sigmoid(outputLayerOutput, true);
+		 INDArray erroratoutputLayer = outo1neto1.mul(errorAtOutput);
 		 
-		 errorContrAtOutput = outputSigmoidedValues.muli(errorAtOutput);
+		 INDArray erroutputLayer = erroratoutputLayer.transpose();
 		 
-		 
-		 INDArray errorContrAtOutputT = errorContrAtOutput.transpose();
-		 System.out.println("error at output: " + errorContrAtOutput);
-		 System.out.println("error at outputT: " + errorContrAtOutputT);
-		 System.out.println("Hidden Layer Output:"+hiddenLayerOutput);
-		 gradientForOutput = errorContrAtOutputT.mmul(hiddenLayerOutput);
-		 System.out.println("Gradient outputlayer:" + gradientForOutput);
-		 gradientForOutput = (gradientForOutput.transpose()).muli(learningRate);
-		 
-		 // update the weights
-		 outputLayerWeights = outputLayerWeights.sub(gradientForOutput);
-		 
-		 // update the bias of output layer
-		 if(biasArrayH != null){
-			 INDArray deltaBiasH = errorContrAtOutput.muli(learningRate);
-			 biasArrayH = biasArrayH.sub(deltaBiasH);
-		 }
-		 
-		 // The hidden layer error contributions
-		 INDArray errorContrAtHidden = errorContrAtOutput.mmul(outputLayerWeights.transpose());
-		 
-		 INDArray bi = func.sigmoid(hiddenLayerOutput, true);
-		 INDArray errorAtHidden = errorContrAtHidden.muli(bi);
+		 INDArray deltao = (erroutputLayer.mmul(hiddenLayerOutput)).transpose();
+		 INDArray deltao1 = deltao.mul(learningRate);
+		 INDArray deltao2 = outputLayerWeights.sub(deltao1);
+		 outputLayerWeights.assign(deltao2);
 		 
 		 
-		 INDArray errorAtHiddenLayer = errorAtHidden.transpose();
+		 INDArray deltaob = erroratoutputLayer.mul(learningRate);
+		 INDArray deltaob2 = biasArrayO.sub(deltaob);
+		 deltabiasArrayO.assign(deltaob2);
 		 
-		 gradientForHidden = errorAtHiddenLayer.mmul(data);
-		 gradientForHidden = (gradientForHidden.transpose()).muli(learningRate);
-		 
-		 hiddenLayerWeights = hiddenLayerWeights.sub(gradientForHidden);
-		 
-		 // updating the bias for the hidden layer
-		 if(biasArrayO != null){
-			 INDArray deltaBiasO = errorAtHidden.muli(learningRate);
-			 biasArrayO = biasArrayO.sub(deltaBiasO);
-		 }
+		 INDArray errorContr = erroratoutputLayer.mmul(outputLayerWeightsCopy.transpose());
+		 INDArray bi = func.sigmoid(errorContr, true);
+		 INDArray errorHiddenLayer = errorContr.mul(bi);
 		 
 		 
+		 INDArray errHiddenLayer = errorHiddenLayer.transpose();
+		 INDArray deltah = (errHiddenLayer.mmul(data)).transpose();
+		 INDArray deltah1 = deltah.mul(learningRate);
+		 INDArray deltah2 = hiddenLayerWeights.sub(deltah1);
+		 hiddenLayerWeights.assign(deltah2);
 		 
+		 INDArray deltaoh = errorHiddenLayer.mul(learningRate);
+		 INDArray deltaoh2 = biasArrayH.sub(deltaoh);
+		 deltabiasArrayH.assign(deltaoh2);
+
 	 }
 	 
 	 /**
@@ -122,4 +115,21 @@ public class Backprop {
 		 return outputLayerWeights;
 	 }
 	 
+	 /**
+	  * This method returns the updated bias for hidden layer
+	  * @return - deltabiasArrayH: holds hidden layer values
+	  */
+	 public INDArray getBiasArrayForHidden()
+	 {
+		 return deltabiasArrayH;
+	 }
+	 
+	 /**
+	  * This method returns the updated bias for output layer
+	  * @return - deltabiasArrayO: holds output layer values
+	  */
+	 public INDArray getBiasArrayForOutput()
+	 {
+		 return deltabiasArrayO;
+	 }
 }
