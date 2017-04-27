@@ -18,8 +18,11 @@ public class Backprop {
 	private INDArray biasArrayH;
 	private INDArray biasArrayO;
 	private double learningRate;
+	private INDArray deltabiasArrayH;
+	private INDArray deltabiasArrayO;
 	/**
-	 * This is consturctor for backprop
+	 * This is the constructor for back propagation class which requires the
+	 * hiddenlayer weights, outputlayer weights and learning rate.
 	 * @param hiddenLayer
 	 * @param outputLayer
 	 */
@@ -30,9 +33,9 @@ public class Backprop {
 		this.outputLayerWeights = outputLayerWeights;
 		this.learningRate = learningRate;
 	 }
-	
+
 	/**
-	 * This constructor provides abilitly to include bias
+	 * The second constructor used when bias is implemented for each layer.
 	 * @param hiddenLayerWeights
 	 * @param outputLayerWeights
 	 * @param learningRate
@@ -46,40 +49,56 @@ public class Backprop {
 		this.biasArrayH = biasArrayH;
 		this.biasArrayO = biasArrayO;
 		this.learningRate = learningRate;
+		deltabiasArrayH = Nd4j.zeros(1, this.biasArrayH.size(1));
+		deltabiasArrayO = Nd4j.zeros(1, this.biasArrayO.size(1));
 	 }
 	 
 	 /**
-	  * This method calculates the gradients 
-	  * This method calculatues the gradients, updates bias and the weights for layers  
-	  * @param outputLayerOutput
-	  * @param hiddenLayerOutput
-	  * @param errorAtOutput
-	  * @param sample
+	  * This method calculates the gradients, updates bias and the weights 
+	  * for layers.  
+	  * @param outputLayerOutput - values at the output layer.
+	  * @param hiddenLayerOutput -  values at the hidden layer.
+	  * @param errorAtOutput - the error that is found at the output layer and 
+	  * propagated back.
+	  * @param data - the one line of data being sent in from the training data.
 	  */
-	 public void calculations(INDArray outputLayerOutput, INDArray hiddenLayerOutput, INDArray errorAtOutput, INDArray sample)
+	 public void calculations(INDArray outputLayerOutput, INDArray hiddenLayerOutput, INDArray errorAtOutput, INDArray data)
 	 {
-		 
+		 INDArray outputLayerWeightsCopy = outputLayerWeights;
 		 INDArray outo1neto1 = func.sigmoid(outputLayerOutput, true);
 		 INDArray erroratoutputLayer = outo1neto1.mul(errorAtOutput);
 		 
 		 INDArray erroutputLayer = erroratoutputLayer.transpose();
 		 
-		 INDArray deltao = ((erroutputLayer.mmul(hiddenLayerOutput)).transpose()).mul(this.learningRate);
-		 this.outputLayerWeights = this.outputLayerWeights.sub(deltao);
+		 INDArray deltao = erroutputLayer.mmul(hiddenLayerOutput);
+		 deltao.assign(deltao.transpose());
+		 deltao.assign(deltao.mul(learningRate));
+		 INDArray deltao2 = outputLayerWeights.sub(deltao);
+		 outputLayerWeights.assign(deltao2);
 		 
-		 INDArray deltaob = erroratoutputLayer.mul(this.learningRate);
-		 this.biasArrayO = this.biasArrayO.sub(deltaob);
 		 
-		 INDArray errorContr = erroratoutputLayer.mmul(this.outputLayerWeights.transpose());
+		 INDArray deltaob = erroratoutputLayer.mul(learningRate);
+		 INDArray deltaob2 = biasArrayO.sub(deltaob);
+		 deltabiasArrayO.assign(deltaob2);
+		 
+		 INDArray errorContr = erroratoutputLayer.mmul(outputLayerWeightsCopy.transpose());
 		 INDArray bi = func.sigmoid(errorContr, true);
 		 INDArray errorHiddenLayer = errorContr.mul(bi);
 		 
-		 INDArray errHiddenLayer = errorHiddenLayer.transpose();
-		 INDArray deltah = ((errHiddenLayer.mmul(sample)).transpose()).mul(this.learningRate);
-		 this.hiddenLayerWeights = this.hiddenLayerWeights.sub(deltah);
 		 
-		 INDArray deltaoh = errorHiddenLayer.mul(this.learningRate);
-		 this.biasArrayH = this.biasArrayH.sub(deltaoh);
+		 INDArray errHiddenLayer = errorHiddenLayer.transpose();
+		 INDArray deltah = errHiddenLayer.mmul(data);
+		 deltah.assign(deltah.transpose());
+		 deltah.assign(deltah.mul(learningRate));
+		 INDArray deltah2 = hiddenLayerWeights.sub(deltah);
+		 hiddenLayerWeights.assign(deltah2);
+		 
+		 INDArray deltaoh = errorHiddenLayer.mul(learningRate);
+		 INDArray deltaoh2 = biasArrayH.sub(deltaoh);
+		 deltabiasArrayH.assign(deltaoh2);
+		 
+		 
+		 
 		 
 	 }
 	 
@@ -103,11 +122,11 @@ public class Backprop {
 	 
 	 public INDArray getBiasArrayForHidden()
 	 {
-		 return biasArrayH;
+		 return deltabiasArrayH;
 	 }
 	 
 	 public INDArray getBiasArrayForOutput()
 	 {
-		 return biasArrayO;
+		 return deltabiasArrayO;
 	 }
 }

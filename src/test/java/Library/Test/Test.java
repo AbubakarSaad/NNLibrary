@@ -30,7 +30,7 @@ public class Test {
 
     	INDArray tes = Nd4j.create(new double[] {0.1, 0.2});
     	INDArray tes2 = Nd4j.create(new double[]{0.3, 0.4});
-    	System.out.println(tes + " " + tes2);
+    	System.out.println(tes + " " + tes2.getRow(0).getColumn(0).assign(0));
     	System.out.println(tes.sub(tes2));
 		
     }

@@ -1,5 +1,8 @@
 package Library.layer;
 
+import java.util.Random;
+
+import org.nd4j.linalg.api.buffer.DataBuffer;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
@@ -17,8 +20,18 @@ public class LayerCreation {
      */
     public LayerCreation(int numberofInputs, int numberofHidden)
     {
-
+    	Nd4j.setDataType(DataBuffer.Type.FLOAT);
         // Nd4j.rand(rows, columns, min, max, random)
+    	float[][] matrix = new float[numberofInputs][numberofHidden];
+    	for(int i=0; i<matrix.length; i++)
+    	{
+    		for(int j=0; j<matrix[i].length; j++)
+    		{
+    			Random rand = new Random();
+    			matrix[i][j] = (float) (rand.nextFloat() * (0.5 - (-0.5)) + (-0.5));
+    		}
+    	}
+    	
         weights = Nd4j.rand(numberofInputs, numberofHidden, (-0.5), 0.5, Nd4j.getRandom());
         
     }

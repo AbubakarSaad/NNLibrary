@@ -4,7 +4,13 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 
 import Library.functions.Functions;
 
-public class GraidentCollector {
+/**
+ * This class is a general class that is based of the backprop class but 
+ * this only calculates the gradients. This method is used in conjunction with
+ * rProp and delta-bar-delta classes.
+ * @author Sulman and Abubakar
+ */
+public class GradientCollector {
 
 	private INDArray outputSigmoidedValues;
 	private INDArray errorContrAtOutput;
@@ -14,12 +20,12 @@ public class GraidentCollector {
 	private INDArray gradientForOutput;
 	private INDArray gradientForHidden;
 	
-	public GraidentCollector()
+	public GradientCollector()
 	{
 		
 	}
 	
-	public void graidents(INDArray outputLayerOutput, INDArray hiddenLayerOutput, INDArray errorAtOutput, INDArray sample)
+	public void gradients(INDArray outputLayerOutput, INDArray hiddenLayerOutput, INDArray errorAtOutput, INDArray sample)
 	{
 		 outputSigmoidedValues = func.sigmoid(outputLayerOutput, true);
 		 errorContrAtOutput = outputSigmoidedValues.muli(errorAtOutput);
@@ -27,8 +33,8 @@ public class GraidentCollector {
 		 
 		 INDArray errorContrAtOutputT = errorContrAtOutput.transpose();
 		 
-		 gradientForOutput = errorContrAtOutputT.mmul(hiddenLayerOutput);
-		 gradientForOutput = gradientForOutput.transpose();
+		 gradientForOutput.assign(errorContrAtOutputT.mmul(hiddenLayerOutput));
+		 gradientForOutput.assign(gradientForOutput.transpose());
 		 
 		 
 		 
@@ -42,9 +48,19 @@ public class GraidentCollector {
 		 
 		 errorAtHidden = errorAtHidden.transpose();
 		 
-		 gradientForHidden = errorAtHidden.mmul(sample);
-		 gradientForHidden = gradientForHidden.transpose();
-		 
-		 
+		 gradientForHidden.assign(errorAtHidden.mmul(sample));
+		 gradientForHidden.assign(gradientForHidden.transpose());
+		 		 
+	}
+	
+	
+	public INDArray getGradientForHidden()
+	{
+		return gradientForHidden;
+	}
+	
+	public INDArray getGradientForOutput()
+	{
+		return gradientForOutput;
 	}
 }
